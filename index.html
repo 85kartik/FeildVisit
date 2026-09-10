@@ -57,18 +57,6 @@
         .insight-card .headline{font-size:18px;font-weight:800;margin:2px 0 0;color:var(--text-primary)}
         .insight-card .detail{font-size:10px;line-height:1.4;color:var(--text-secondary)}
         .insight-card.good .headline{color:#059669}.insight-card.warn .headline{color:#d97706}.insight-card.risk .headline{color:#dc2626}.insight-card.info .headline{color:var(--accent)}
-        .filter-bar{background:var(--card-bg);backdrop-filter:blur(20px);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid var(--border);display:flex;flex-direction:column;gap:8px;position:sticky;top:8px;z-index:50}
-        .filter-bar .filter-label{font-size:10px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:4px}
-        .filter-bar .filter-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-        .filter-bar select{padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);font-size:12px;font-weight:500;color:var(--text-primary);cursor:pointer;flex:1;min-width:80px;font-family:inherit}
-        .filter-search{position:relative;flex:1;min-width:100%}
-        .filter-search i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:12px}
-        .filter-search input{width:100%;padding:6px 10px 6px 30px;border:1px solid var(--border);border-radius:8px;background:var(--bg);font-size:12px;font-weight:500;color:var(--text-primary);font-family:inherit}
-        .filter-bar .reset-btn{background:var(--accent);color:#fff;border:none;padding:6px 14px;border-radius:8px;cursor:pointer;font-weight:600;font-size:12px;font-family:inherit;display:flex;align-items:center;gap:4px}
-        .filter-bar .reset-btn:active{transform:scale(.95)}
-        .filter-bar .filter-count{font-size:11px;font-weight:600;color:var(--text-secondary);background:var(--bg);padding:2px 10px;border-radius:16px;white-space:nowrap}
-        .filter-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-        .active-filter{font-size:10px;font-weight:600;color:var(--accent);background:rgba(99,102,241,.08);padding:2px 10px;border-radius:16px;white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis}
         .card-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px}
         .card{background:var(--card-bg);backdrop-filter:blur(20px);border-radius:var(--radius);padding:14px 14px 16px;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;overflow:hidden;cursor:pointer}
         .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-light),#a78bfa);opacity:0;transition:opacity .3s}
@@ -137,58 +125,15 @@
         .footer span{margin:0 6px}
         .footer i{color:var(--accent);margin:0 3px}
         .footer a{color:var(--accent);text-decoration:none}
-        @media(min-width:480px){
-            .stats-grid{grid-template-columns:repeat(3,1fr);gap:8px}
-            .stat-card .number{font-size:20px}
-            .stat-card .label{font-size:9px}
-            .card-grid{grid-template-columns:1fr 1fr}
-            .card-full{grid-column:1/-1}
-            .scores-summary{grid-template-columns:repeat(3,1fr)}
-            .insight-grid{grid-template-columns:repeat(2,1fr)}
-            .modal-content .chart-container{height:320px}
-        }
-        @media(min-width:600px){
-            .form-banner{flex-direction:row;align-items:center;padding:12px 20px}
-            .form-banner .form-btn{width:auto}
-            .filter-bar{flex-direction:row;flex-wrap:wrap;align-items:center;padding:10px 16px}
-            .filter-search{min-width:140px;flex:1}
-            .header-title p{display:block}
-            .filter-bar .filter-row{flex:1}
-            .section-toolbar{flex-direction:row;justify-content:space-between;align-items:center}
-        }
-        @media(min-width:768px){
-            body{padding:20px}
-            .header{padding:24px 28px}
-            .header-title h1{font-size:24px}
-            .stats-grid{grid-template-columns:repeat(6,1fr)}
-            .stat-card .number{font-size:24px}
-            .stat-card .label{font-size:10px}
-            .card-grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
-            .card-full{grid-column:1/-1}
-            .scores-summary{grid-template-columns:repeat(6,1fr)}
-            .insight-grid{grid-template-columns:repeat(4,1fr)}
-            .modal-content .chart-container{height:380px}
-            .modal-content{max-width:800px;padding:28px 32px 32px}
-        }
-        @media(min-width:1024px){
-            .card-grid{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}
-            .modal-content .chart-container{height:420px}
-        }
-        @media print{
-            body{background:#fff;padding:0}
-            .header{box-shadow:none;border:1px solid #ddd}
-            .filter-bar,.toolbar-actions,.card-header .actions,.modal-overlay,.toast,.header-actions,.form-banner{display:none!important}
-            .card{box-shadow:none;border:1px solid #ddd;break-inside:avoid;cursor:default}
-            .insight-card{box-shadow:none;border:1px solid #ddd}
-            .data-table-wrap{max-height:none;overflow:visible}
-            .stat-card{background:#f5f5f5;border:1px solid #ddd}
-            .stat-card .number{color:#1a1a2e}
-        }
+        @media(min-width:480px){.stats-grid{grid-template-columns:repeat(3,1fr);gap:8px}.stat-card .number{font-size:20px}.stat-card .label{font-size:9px}.card-grid{grid-template-columns:1fr 1fr}.card-full{grid-column:1/-1}.scores-summary{grid-template-columns:repeat(3,1fr)}.insight-grid{grid-template-columns:repeat(2,1fr)}.modal-content .chart-container{height:320px}}
+        @media(min-width:600px){.form-banner{flex-direction:row;align-items:center;padding:12px 20px}.form-banner .form-btn{width:auto}.header-title p{display:block}.section-toolbar{flex-direction:row;justify-content:space-between;align-items:center}}
+        @media(min-width:768px){body{padding:20px}.header{padding:24px 28px}.header-title h1{font-size:24px}.stats-grid{grid-template-columns:repeat(6,1fr)}.stat-card .number{font-size:24px}.stat-card .label{font-size:10px}.card-grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}.card-full{grid-column:1/-1}.scores-summary{grid-template-columns:repeat(6,1fr)}.insight-grid{grid-template-columns:repeat(4,1fr)}.modal-content .chart-container{height:380px}.modal-content{max-width:800px;padding:28px 32px 32px}}
+        @media(min-width:1024px){.card-grid{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}.modal-content .chart-container{height:420px}}
+        @media print{body{background:#fff;padding:0}.header{box-shadow:none;border:1px solid #ddd}.toolbar-actions,.card-header .actions,.modal-overlay,.toast,.header-actions,.form-banner{display:none!important}.card{box-shadow:none;border:1px solid #ddd;break-inside:avoid;cursor:default}.insight-card{box-shadow:none;border:1px solid #ddd}.data-table-wrap{max-height:none;overflow:visible}.stat-card{background:#f5f5f5;border:1px solid #ddd}.stat-card .number{color:#1a1a2e}}
     </style>
 </head>
 <body>
 <div class="dashboard-container">
-
     <header class="header">
         <div class="header-top">
             <div class="header-title">
@@ -238,42 +183,6 @@
         <div class="insight-card info"><div class="eyebrow">Strongest</div><div class="headline" id="insightStrongest">—</div><div class="detail" id="insightStrongestDetail">—</div></div>
         <div class="insight-card risk"><div class="eyebrow">Priority Issue</div><div class="headline" id="insightRisk">—</div><div class="detail" id="insightRiskDetail">—</div></div>
         <div class="insight-card warn"><div class="eyebrow">LMS Adoption</div><div class="headline" id="insightAdoption">—</div><div class="detail" id="insightAdoptionDetail">—</div></div>
-    </div>
-
-    <div class="filter-bar">
-        <div class="filter-label"><i class="fas fa-sliders-h"></i> Filters</div>
-        <div class="filter-search"><i class="fas fa-search"></i><input id="globalSearch" type="search" placeholder="Search…"></div>
-        <div class="filter-row">
-            <select id="filterGender">
-                <option value="all">All Genders</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Prefer not to say">Prefer not to say</option>
-            </select>
-            <select id="filterYear">
-                <option value="all">All Years</option>
-                <option value="First Year">First Year</option>
-                <option value="Second Year">Second Year</option>
-                <option value="Third Year">Third Year</option>
-                <option value="Postgraduate">Postgraduate</option>
-                <option value="Other">Other</option>
-            </select>
-            <select id="filterFaculty">
-                <option value="all">All Faculties</option>
-                <option value="Science">Science</option>
-                <option value="Commerce">Commerce</option>
-                <option value="Management">Management</option>
-                <option value="Arts">Arts</option>
-                <option value="Other">Other</option>
-            </select>
-        </div>
-        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
-            <button class="reset-btn" onclick="resetFilters()"><i class="fas fa-undo-alt"></i> Reset</button>
-            <div class="filter-meta">
-                <span class="active-filter" id="activeFilterSummary">All</span>
-                <span class="filter-count" id="filterCount">0</span>
-            </div>
-        </div>
     </div>
 
     <div class="card-grid">
@@ -474,7 +383,7 @@
 
 <script>
 // ============================================================
-// RAW DATA — 102 Responses from Google Form CSV
+// RAW DATA — 102 Responses
 // ============================================================
 const rawData = [
 {gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"",frequency:"Several times a week",ease:"Difficult",findMaterials:"No",usefulness:"Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"Yes",tracking:"Sometimes",mobileAccess:"Yes",reliability:"Sometimes Unreliable",problems:"Login/access problems, Slow loading, No major problems",improves:"Yes",satisfaction:"Very Satisfied"},
@@ -628,14 +537,13 @@ const problemCounts=countProblemOccurrences(rawData,'problems');
 // SUGGESTIONS
 // ============================================================
 const suggestions=[
-'"Improve mobile performance, easier navigation, timely notifications, attendance and performance tracking, an integrated calendar, and easier access to study materials and assignments."',
+'"Improve mobile performance, easier navigation, timely notifications, and easier access to study materials."',
 '"Enhancing user engagement, accessibility, and personalization."',
-'"User-friendly interface, faster loading, easy navigation, and better access to study materials and assignments."',
+'"User-friendly interface, faster loading, easy navigation, and better access."',
 '"Improve navigation, speed, and mobile responsiveness."',
 '"An offline mode will be great for us."',
 '"Please give no network problems."',
 '"Improve user experience."',
-'"We can prepare ourself more perfect from LMS."',
 '"Nothing, It is very easy and convenient for students."',
 '"Look for more feedback."',
 '"Very good."',
@@ -671,7 +579,8 @@ let showNumbersState={};
 // ============================================================
 // BUILD CHART
 // ============================================================
-function buildChart(id,type,labels,data,colors,showNumbers=false){
+function buildChart(id,type,labels,data,colors,showNumbers){
+showNumbers=showNumbers||false;
 const ctx=document.getElementById(id);if(!ctx)return null;
 if(chartInstances[id]){chartInstances[id].destroy();delete chartInstances[id]}
 const isPie=['pie','doughnut'].includes(type);
@@ -680,9 +589,9 @@ const isLine=type==='line';
 const isRadar=type==='radar';
 const chartKey=id.replace('Chart','');
 showNumbersState[chartKey]=showNumbers;
-let config={type:type,data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderColor:isPie?'#fff':colors,borderWidth:isPie?2:1,borderRadius:isBar?6:0,borderSkipped:isBar?false:undefined,tension:isLine?0.3:undefined,fill:isLine?true:false,pointBackgroundColor:isLine?colors:undefined,pointRadius:isLine?3:undefined}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:isPie?'bottom':'top',labels:{font:{size:isPie?10:9,weight:'600'},padding:isPie?10:6,boxWidth:isPie?10:8,color:getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim()||'#4a4a6a'},display:!isRadar},datalabels:{display:(isPie)&&showNumbers,color:'#ffffff',font:{weight:'bold',size:10},formatter:(value,ctx)=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0);const p=t>0?((value/t)*100).toFixed(2):0;return value+' ('+p+'%)'},anchor:'center',align:'center',offset:0}},scales:isPie?undefined:{y:{beginAtZero:true,ticks:{stepSize:isBar?1:undefined,font:{weight:'600',size:9},color:getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim()||'#4a4a6a'},grid:{color:getComputedStyle(document.documentElement).getPropertyValue('--border').trim()||'rgba(0,0,0,0.06)'}},x:{ticks:{font:{size:9,weight:'600'},color:getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim()||'#4a4a6a'},grid:{display:false}}},cutout:type==='doughnut'?'55%':undefined}},plugins:isPie?[ChartDataLabels]:[]};
+let config={type:type,data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderColor:isPie?'#fff':colors,borderWidth:isPie?2:1,borderRadius:isBar?6:0,borderSkipped:isBar?false:undefined,tension:isLine?0.3:undefined,fill:isLine?true:false,pointBackgroundColor:isLine?colors:undefined,pointRadius:isLine?3:undefined}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:isPie?'bottom':'top',labels:{font:{size:isPie?10:9,weight:'600'},padding:isPie?10:6,boxWidth:isPie?10:8},display:!isRadar},datalabels:{display:isPie&&showNumbers,color:'#ffffff',font:{weight:'bold',size:10},formatter:(value,ctx)=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0);const p=t>0?((value/t)*100).toFixed(2):0;return value+' ('+p+'%)'},anchor:'center',align:'center',offset:0}},scales:isPie?undefined:{y:{beginAtZero:true,ticks:{stepSize:isBar?1:undefined,font:{weight:'600',size:9}},grid:{color:'rgba(0,0,0,0.06)'}},x:{ticks:{font:{size:9,weight:'600'}},grid:{display:false}}},cutout:type==='doughnut'?'55%':undefined}},plugins:isPie?[ChartDataLabels]:[]};
 if(isRadar){config.options.scales={r:{beginAtZero:true,ticks:{stepSize:1},pointLabels:{font:{size:9,weight:'600'}},grid:{color:'rgba(0,0,0,0.06)'}}};config.options.plugins.legend.display=true;config.options.plugins.datalabels={display:false}}
-if(isBar&&showNumbers){config.options.plugins.datalabels={display:true,color:getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim()||'#4a4a6a',font:{weight:'bold',size:9},anchor:'end',align:'end',offset:3,formatter:(v)=>v}}
+if(isBar&&showNumbers){config.options.plugins.datalabels={display:true,color:'#4a4a6a',font:{weight:'bold',size:9},anchor:'end',align:'end',offset:3,formatter:(v)=>v}}
 const chart=new Chart(ctx,config);
 chartInstances[id]=chart;return chart;
 }
@@ -697,7 +606,7 @@ const chartId=chartKey+'Chart';const data=chartData[chartKey];
 if(data){const card=document.querySelector('[data-chart="'+chartKey+'"]');let type='doughnut';
 if(card){const btn=card.querySelector('.action-btn.active');if(btn){const o=btn.getAttribute('onclick')||'';if(o.includes('bar'))type='bar';else if(o.includes('pie'))type='pie';else if(o.includes('line'))type='line';else if(o.includes('radar'))type='radar'}}
 buildChart(chartId,type,data.labels,data.data,data.colors,true);
-const hint=card?.querySelector('.chart-hint .click-text');if(hint){hint.textContent='📊 Numbers visible';hint.classList.add('visible')}}}
+const hint=card?card.querySelector('.chart-hint .click-text'):null;if(hint){hint.textContent='📊 Numbers visible';hint.classList.add('visible')}}}
 openModal(chartKey);
 }
 
@@ -711,7 +620,7 @@ const chartId=id+'Chart';const data=chartData[id];
 if(data){const card=document.querySelector('[data-chart="'+id+'"]');let type='doughnut';
 if(card){const btn=card.querySelector('.action-btn.active');if(btn){const o=btn.getAttribute('onclick')||'';if(o.includes('bar'))type='bar';else if(o.includes('pie'))type='pie';else if(o.includes('line'))type='line';else if(o.includes('radar'))type='radar'}}
 buildChart(chartId,type,data.labels,data.data,data.colors,false);
-const hint=card?.querySelector('.chart-hint .click-text');if(hint){hint.textContent='👆 Tap to expand';hint.classList.remove('visible')}}}
+const hint=card?card.querySelector('.chart-hint .click-text'):null;if(hint){hint.textContent='👆 Tap to expand';hint.classList.remove('visible')}}}
 document.getElementById('modalOverlay').classList.remove('active');
 if(modalChartInstance){modalChartInstance.destroy();modalChartInstance=null}
 }
@@ -745,16 +654,16 @@ const card=document.querySelector('[data-chart="'+id+'"]');if(card){card.querySe
 // ============================================================
 let modalChartInstance=null;let modalChartId='';let modalNumbersVisible=false;
 function openModal(id){const data=chartData[id];if(!data)return;modalChartId=id;
-document.getElementById('modalTitle').textContent=document.querySelector('[data-chart="'+id+'"] .card-header h3')?.textContent||id;
+document.getElementById('modalTitle').textContent=document.querySelector('[data-chart="'+id+'"] .card-header h3')?document.querySelector('[data-chart="'+id+'"] .card-header h3').textContent:id;
 document.getElementById('modalOverlay').classList.add('active');
 if(modalChartInstance){modalChartInstance.destroy();modalChartInstance=null}
-const type=document.querySelector('[data-chart="'+id+'"] .action-btn.active')?.textContent?.includes('bar')?'bar':'doughnut';
+const type='doughnut';
 modalNumbersVisible=showNumbersState[id]||false;
 modalChartInstance=buildChart('modalChart',type,data.labels,data.data,data.colors,modalNumbersVisible)}
 function closeModal(){closeModalAndHideNumbers()}
 function switchModalChart(type){const data=chartData[modalChartId];if(!data||!modalChartInstance)return;modalChartInstance.destroy();modalChartInstance=buildChart('modalChart',type,data.labels,data.data,data.colors,modalNumbersVisible)}
 function downloadModalChart(){const c=document.getElementById('modalChart');const l=document.createElement('a');l.download='chart_'+modalChartId+'.png';l.href=c.toDataURL('image/png');l.click();showToast('📸 Downloaded!')}
-function toggleModalNumbers(){modalNumbersVisible=!modalNumbersVisible;const data=chartData[modalChartId];if(!data||!modalChartInstance)return;modalChartInstance.destroy();const type=document.querySelector('[data-chart="'+modalChartId+'"] .action-btn.active')?.textContent?.includes('bar')?'bar':'doughnut';modalChartInstance=buildChart('modalChart',type,data.labels,data.data,data.colors,modalNumbersVisible)}
+function toggleModalNumbers(){modalNumbersVisible=!modalNumbersVisible;const data=chartData[modalChartId];if(!data||!modalChartInstance)return;modalChartInstance.destroy();modalChartInstance=buildChart('modalChart','doughnut',data.labels,data.data,data.colors,modalNumbersVisible)}
 
 // ============================================================
 // THEME
@@ -770,7 +679,7 @@ document.getElementById('exportData').addEventListener('click',function(){const 
 // ============================================================
 // REFRESH
 // ============================================================
-document.getElementById('refreshBtn').addEventListener('click',function(){initCharts();refreshFiltered();showToast('🔄 Refreshed!')});
+document.getElementById('refreshBtn').addEventListener('click',function(){initCharts();updateStats();renderTable(rawData);updateInsightCards(rawData);showToast('🔄 Refreshed!')});
 
 // ============================================================
 // TOAST
@@ -779,12 +688,7 @@ let toastTimeout;
 function showToast(msg){const t=document.getElementById('toast');document.getElementById('toastMessage').textContent=msg;t.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>t.classList.remove('show'),2000)}
 
 // ============================================================
-// FILTERS
-// ============================================================
-function resetFilters(){document.getElementById('filterGender').value='all';document.getElementById('filterYear').value='all';document.getElementById('filterFaculty').value='all';document.getElementById('globalSearch').value='';refreshFiltered();showToast('🔄 Reset')}
-
-// ============================================================
-// UPDATE HEADER STATS
+// UPDATE STATS
 // ============================================================
 function updateStats(){
 document.getElementById('totalResponses').textContent=total;
@@ -812,19 +716,16 @@ document.getElementById('barConvenience').style.width=(avgConvenience/5*100)+'%'
 document.getElementById('barCommunication').style.width=(avgCommunication*100)+'%';
 document.getElementById('barTracking').style.width=(avgTracking*100)+'%';
 }
-updateStats();
 
 // ============================================================
-// SUGGESTIONS RENDER
+// SUGGESTIONS
 // ============================================================
 const sugC=document.getElementById('suggestionsContainer');
 suggestions.forEach(s=>{const d=document.createElement('div');d.className='suggestion-item';d.innerHTML='<i class="fas fa-quote-left quote-icon"></i>'+s;sugC.appendChild(d)});
 
 // ============================================================
-// FILTERED DATA
+// INSIGHT CARDS
 // ============================================================
-function getFilteredData(){const g=document.getElementById('filterGender').value;const y=document.getElementById('filterYear').value;const f=document.getElementById('filterFaculty').value;const q=(document.getElementById('globalSearch').value||'').trim().toLowerCase();return rawData.filter(d=>{if(!((g==='all'||d.gender===g)&&(y==='all'||d.year===y)&&(f==='all'||d.faculty===f)))return false;if(!q)return true;return Object.values(d).some(v=>String(v||'').toLowerCase().includes(q))})}
-
 function updateInsightCards(data){const n=data.length||1;const sat=data.filter(d=>['Satisfied','Very Satisfied'].includes(d.satisfaction)).length/n*100;const adopt=data.filter(d=>d.usesLMS==='Yes').length/n*100;const iss=sortObj(countProblemOccurrences(data,'problems'));const ti=iss[0];
 const cs=[['Usefulness',avgBy(data,'usefulness',usefulnessMap),5],['Ease',avgBy(data,'ease',easeMap),5],['Reliability',avgBy(data,'reliability',reliabilityMap),5],['Assignment',avgBy(data,'assignmentConvenience',convenienceMap),5],['Teacher Comm.',avgBy(data,'teacherComm',commMap),1],['Tracking',avgBy(data,'tracking',trackingMap),1]];
 const str=cs.slice().sort((a,b)=>(b[1]/b[2])-(a[1]/a[2]))[0];
@@ -838,32 +739,30 @@ document.getElementById('insightAdoption').textContent=data.length?adopt.toFixed
 document.getElementById('insightAdoptionDetail').textContent=data.length?data.filter(d=>d.usesLMS==='Yes').length+' of '+data.length+' use LMS.':'—';
 }
 
-function renderTable(data){const body=document.getElementById('responseTableBody');document.getElementById('tableCountBadge').textContent=data.length+' rows';if(!data.length){body.innerHTML='<tr><td colspan="11" class="empty-state">No matching respondents.</td></tr>';return}
+// ============================================================
+// TABLE
+// ============================================================
+function renderTable(data){const body=document.getElementById('responseTableBody');document.getElementById('tableCountBadge').textContent=data.length+' rows';if(!data.length){body.innerHTML='<tr><td colspan="11" class="empty-state">No data.</td></tr>';return}
 body.innerHTML=data.map((d,i)=>{const sc=['Very Satisfied','Satisfied'].includes(d.satisfaction)?'good':d.satisfaction==='Neutral'?'warn':'bad';const uc=d.usesLMS==='Yes'?'good':'warn';return '<tr><td>'+(i+1)+'</td><td>'+esc(d.faculty)+'</td><td>'+esc(d.year)+'</td><td>'+esc(d.gender)+'</td><td><span class="status-pill '+uc+'">'+esc(d.usesLMS)+'</span></td><td>'+esc(d.platform||'—')+'</td><td>'+esc(d.frequency)+'</td><td>'+esc(d.usefulness)+'</td><td>'+esc(d.ease)+'</td><td>'+esc(d.reliability)+'</td><td><span class="status-pill '+sc+'">'+esc(d.satisfaction)+'</span></td></tr>'}).join('')}
-
-function refreshFiltered(){const data=getFilteredData();document.getElementById('filterCount').textContent=data.length;
-const active=[];const g=document.getElementById('filterGender').value;const y=document.getElementById('filterYear').value;const f=document.getElementById('filterFaculty').value;const q=document.getElementById('globalSearch').value.trim();if(g!=='all')active.push(g);if(y!=='all')active.push(y);if(f!=='all')active.push(f);if(q)active.push('🔍');document.getElementById('activeFilterSummary').textContent=active.length?active.join(' • '):'All';
-updateInsightCards(data);renderTable(data)}
 
 // ============================================================
 // EVENTS
 // ============================================================
-document.querySelectorAll('.filter-bar select').forEach(s=>s.addEventListener('change',refreshFiltered));
-document.getElementById('globalSearch').addEventListener('input',refreshFiltered);
 document.getElementById('printReport').addEventListener('click',()=>window.print());
 document.getElementById('exportCsv').addEventListener('click',()=>{
-const data=getFilteredData();const h=['Gender','Faculty','Academic Year','Uses LMS','Platform','Frequency','Ease','Usefulness','Reliability','Assignment Convenience','Teacher Communication','Assignment Tracking','Satisfaction'];const k=['gender','faculty','year','usesLMS','platform','frequency','ease','usefulness','reliability','assignmentConvenience','teacherComm','tracking','satisfaction'];
-const csv=[h.join(',')];data.forEach(r=>{csv.push(k.map(x=>'"'+String(r[x]||'').replace(/"/g,'""')+'"').join(','))});
+const h=['Gender','Faculty','Academic Year','Uses LMS','Platform','Frequency','Ease','Usefulness','Reliability','Assignment Convenience','Teacher Communication','Assignment Tracking','Satisfaction'];const k=['gender','faculty','year','usesLMS','platform','frequency','ease','usefulness','reliability','assignmentConvenience','teacherComm','tracking','satisfaction'];
+const csv=[h.join(',')];rawData.forEach(r=>{csv.push(k.map(x=>'"'+String(r[x]||'').replace(/"/g,'""')+'"').join(','))});
 const b=new Blob([csv.join('\n')],{type:'text/csv;charset=utf-8;'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='lms_data.csv';a.click();URL.revokeObjectURL(a.href);showToast('📊 CSV downloaded!')});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();if(e.key==='d'&&e.ctrlKey){e.preventDefault();document.getElementById('themeToggle').click()}});
 
 // ============================================================
 // INIT
 // ============================================================
+updateStats();
 initCharts();
-refreshFiltered();
-console.log('%c📱 LMS Dashboard Pro','font-size:20px;font-weight:800;color:#4f46e5');
-console.log('%c📊 '+total+' responses loaded','font-size:14px;color:#4a4a6a');
+renderTable(rawData);
+updateInsightCards(rawData);
+console.log('📱 LMS Dashboard Pro - '+total+' responses loaded');
 </script>
 </body>
 </html>
