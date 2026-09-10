@@ -2,365 +2,3487 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>LMS Perception Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+<!-- Chart Data Labels -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+
+<!-- Font Awesome -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+>
+
+<!-- Google Font -->
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+  rel="stylesheet"
+>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:'Inter',sans-serif;background:#f0f2f8;padding:12px;color:#1a1a2e}
-.wrap{max-width:1440px;margin:0 auto}
-.hd{background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);border-radius:16px;padding:20px 18px;margin-bottom:16px}
-.hd-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.hd h1{font-size:20px;font-weight:800;color:#fff}
-.hd h1 i{color:#818cf8;margin-right:8px}
-.hd p{color:rgba(255,255,255,.5);font-size:11px;margin-top:2px}
-.hd-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.85);padding:6px 12px;border-radius:10px;cursor:pointer;font-size:11px;display:inline-flex;align-items:center;gap:4px;text-decoration:none}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px}
-.st{background:rgba(255,255,255,.06);border-radius:10px;padding:8px 6px;text-align:center}
-.st .n{font-size:18px;font-weight:800;color:#fff}
-.st .n .s{font-size:12px;color:#818cf8}
-.st .l{font-size:8px;font-weight:600;color:rgba(255,255,255,.45);text-transform:uppercase;margin-top:1px}
-.st .mb{width:100%;height:2px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:4px;overflow:hidden}
-.st .mb .f{height:100%;border-radius:2px;background:linear-gradient(90deg,#818cf8,#6366f1)}
-.secttl{font-size:14px;font-weight:800;display:flex;align-items:center;gap:6px;margin-bottom:12px}
-.secttl i{color:#6366f1}
-.insights{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
-.ic{background:#fff;border-radius:10px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.06)}
-.ic .ey{font-size:8px;font-weight:800;text-transform:uppercase;color:#8a8aaa}
-.ic .hn{font-size:18px;font-weight:800;margin:2px 0 0}
-.ic .dt{font-size:10px;color:#4a4a6a}
-.ic.g .hn{color:#059669}.ic.w .hn{color:#d97706}.ic.r .hn{color:#dc2626}.ic.i .hn{color:#6366f1}
-.grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px}
-.cd{background:#fff;border-radius:16px;padding:14px;box-shadow:0 4px 16px rgba(0,0,0,.06);cursor:pointer}
-.cd-full{grid-column:1}
-.cd-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;pointer-events:none}
-.cd-hd h3{font-size:13px;font-weight:700}
-.cd-hd h3 i{color:#6366f1;margin-right:6px}
-.cd-hd .bts{display:flex;gap:4px;pointer-events:auto}
-.cd-hd .bt{background:#f0f2f8;border:1px solid #e6e8f0;color:#4a4a6a;padding:3px 8px;border-radius:6px;cursor:pointer;font-size:9px;font-weight:600}
-.cd-hd .bt.on{background:#6366f1;color:#fff;border-color:#6366f1}
-.ch{position:relative;height:200px;pointer-events:none}
-.ch.t{height:240px}
-.hint{text-align:center;font-size:9px;color:#8a8aaa;margin-top:4px;pointer-events:none}
-.hint span{background:rgba(99,102,241,.06);padding:2px 10px;border-radius:10px;color:#6366f1;font-weight:600;font-size:9px;display:inline-block}
-.sc{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:12px}
-.sc-i{background:#f0f2f8;padding:6px 8px;border-radius:10px;text-align:center;border:1px solid #e6e8f0}
-.sc-i .v{font-size:15px;font-weight:800}
-.sc-i .v .m{font-size:10px;color:#8a8aaa;font-weight:400}
-.sc-i .l{font-size:7px;font-weight:700;color:#4a4a6a;text-transform:uppercase;margin-top:1px}
-.sc-i .bg{width:100%;height:2px;background:#e8ecf4;border-radius:2px;margin-top:3px;overflow:hidden}
-.sc-i .fl{height:100%;border-radius:2px}
-.sc-i .fl.us{background:linear-gradient(90deg,#4f46e5,#818cf8)}
-.sc-i .fl.ea{background:linear-gradient(90deg,#059669,#34d399)}
-.sc-i .fl.re{background:linear-gradient(90deg,#d97706,#fbbf24)}
-.sc-i .fl.co{background:linear-gradient(90deg,#db2777,#f472b6)}
-.sc-i .fl.cm{background:linear-gradient(90deg,#7c3aed,#a78bfa)}
-.sc-i .fl.tr{background:linear-gradient(90deg,#0d9488,#2dd4bf)}
-.tw{max-height:300px;overflow:auto;border:1px solid #e6e8f0;border-radius:10px}
-table{width:100%;border-collapse:collapse;font-size:10px;min-width:600px}
-table th{position:sticky;top:0;background:#f0f2f8;color:#4a4a6a;text-align:left;padding:6px 8px;border-bottom:2px solid #e6e8f0;font-size:8px;text-transform:uppercase;font-weight:700}
-table td{padding:5px 8px;border-bottom:1px solid #e6e8f0;font-size:10px}
-.pill{display:inline-flex;padding:1px 8px;border-radius:999px;font-size:8px;font-weight:700}
-.pill.g{background:rgba(34,197,94,.12);color:#15803d}
-.pill.w{background:rgba(245,158,11,.14);color:#b45309}
-.pill.b{background:rgba(239,68,68,.12);color:#b91c1c}
-.md{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:9999;display:none;justify-content:center;align-items:center;padding:12px}
-.md.on{display:flex}
-.md-c{background:#fff;border-radius:20px;padding:20px 16px;width:100%;max-width:800px;max-height:95vh;overflow:hidden}
-.md-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.md-h h2{font-size:16px;font-weight:700}
-.md-h .cl{background:#f0f2f8;border:1px solid #e6e8f0;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
-.md .ch{height:300px}
-.md-acts{display:flex;gap:4px;margin-top:12px;flex-wrap:wrap;justify-content:center}
-.md-acts button{background:#f0f2f8;border:1px solid #e6e8f0;padding:4px 12px;border-radius:6px;cursor:pointer;font-size:10px;font-weight:600;color:#4a4a6a}
-.md-acts button.on{background:#6366f1;color:#fff;border-color:#6366f1}
-.md-acts .dl{background:#6366f1;color:#fff;border-color:#6366f1}
-.loading{text-align:center;padding:40px;font-size:16px;font-weight:600;color:#6366f1}
-.loading i{font-size:32px;display:block;margin-bottom:12px}
-.err{text-align:center;padding:40px;color:#dc2626;font-size:14px}
-.ft{text-align:center;padding:16px;color:#8a8aaa;font-size:10px;border-top:1px solid #e6e8f0}
-@media(min-width:480px){.stats{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr 1fr}.cd-full{grid-column:1/-1}.insights{grid-template-columns:repeat(4,1fr)}.sc{grid-template-columns:repeat(6,1fr)}}
-@media(min-width:768px){body{padding:20px}.stats{grid-template-columns:repeat(6,1fr)}.st .n{font-size:24px}.grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: #f0f2f8;
+  padding: 12px;
+  color: #1a1a2e;
+}
+
+.wrap {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* ================= HEADER ================= */
+
+.hd {
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  border-radius: 16px;
+  padding: 20px 18px;
+  margin-bottom: 16px;
+}
+
+.hd-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hd h1 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.hd h1 i {
+  color: #818cf8;
+  margin-right: 8px;
+}
+
+.hd p {
+  color: rgba(255,255,255,.55);
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+.hd-btn {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.9);
+  padding: 7px 13px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  transition: .2s;
+}
+
+.hd-btn:hover {
+  background: rgba(255,255,255,.16);
+}
+
+/* ================= STATS ================= */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.st {
+  background: rgba(255,255,255,.07);
+  border-radius: 10px;
+  padding: 9px 6px;
+  text-align: center;
+}
+
+.st .n {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.st .n .s {
+  font-size: 12px;
+  color: #818cf8;
+}
+
+.st .l {
+  font-size: 8px;
+  font-weight: 600;
+  color: rgba(255,255,255,.5);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.st .mb {
+  width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,.1);
+  border-radius: 3px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.st .mb .f {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #818cf8, #6366f1);
+  transition: width .5s ease;
+}
+
+/* ================= SECTION ================= */
+
+.secttl {
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.secttl i {
+  color: #6366f1;
+}
+
+/* ================= INSIGHTS ================= */
+
+.insights {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.ic {
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
+}
+
+.ic .ey {
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #8a8aaa;
+}
+
+.ic .hn {
+  font-size: 18px;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+.ic .dt {
+  font-size: 10px;
+  color: #4a4a6a;
+  margin-top: 2px;
+}
+
+.ic.g .hn {
+  color: #059669;
+}
+
+.ic.w .hn {
+  color: #d97706;
+}
+
+.ic.r .hn {
+  color: #dc2626;
+}
+
+.ic.i .hn {
+  color: #6366f1;
+}
+
+/* ================= GRID ================= */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.cd {
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.cd:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 7px 22px rgba(0,0,0,.09);
+}
+
+.cd-full {
+  grid-column: 1;
+}
+
+.cd-hd {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  pointer-events: none;
+}
+
+.cd-hd h3 {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cd-hd h3 i {
+  color: #6366f1;
+  margin-right: 6px;
+}
+
+.cd-hd .bts {
+  display: flex;
+  gap: 4px;
+  pointer-events: auto;
+}
+
+.cd-hd .bt {
+  background: #f0f2f8;
+  border: 1px solid #e6e8f0;
+  color: #4a4a6a;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.cd-hd .bt:hover {
+  background: #e7e9f4;
+}
+
+.cd-hd .bt.on {
+  background: #6366f1;
+  color: #fff;
+  border-color: #6366f1;
+}
+
+/* ================= CHART ================= */
+
+.ch {
+  position: relative;
+  height: 200px;
+  pointer-events: none;
+}
+
+.ch.t {
+  height: 240px;
+}
+
+.hint {
+  text-align: center;
+  font-size: 9px;
+  color: #8a8aaa;
+  margin-top: 4px;
+  pointer-events: none;
+}
+
+.hint span {
+  background: rgba(99,102,241,.06);
+  padding: 3px 10px;
+  border-radius: 10px;
+  color: #6366f1;
+  font-weight: 600;
+  font-size: 9px;
+  display: inline-block;
+}
+
+/* ================= SCORE CARDS ================= */
+
+.sc {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.sc-i {
+  background: #f0f2f8;
+  padding: 6px 8px;
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid #e6e8f0;
+}
+
+.sc-i .v {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.sc-i .v .m {
+  font-size: 10px;
+  color: #8a8aaa;
+  font-weight: 400;
+}
+
+.sc-i .l {
+  font-size: 7px;
+  font-weight: 700;
+  color: #4a4a6a;
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+
+.sc-i .bg {
+  width: 100%;
+  height: 3px;
+  background: #e8ecf4;
+  border-radius: 3px;
+  margin-top: 3px;
+  overflow: hidden;
+}
+
+.sc-i .fl {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.sc-i .fl.us {
+  background: linear-gradient(90deg,#4f46e5,#818cf8);
+}
+
+.sc-i .fl.ea {
+  background: linear-gradient(90deg,#059669,#34d399);
+}
+
+.sc-i .fl.re {
+  background: linear-gradient(90deg,#d97706,#fbbf24);
+}
+
+.sc-i .fl.co {
+  background: linear-gradient(90deg,#db2777,#f472b6);
+}
+
+.sc-i .fl.cm {
+  background: linear-gradient(90deg,#7c3aed,#a78bfa);
+}
+
+.sc-i .fl.tr {
+  background: linear-gradient(90deg,#0d9488,#2dd4bf);
+}
+
+/* ================= TABLE ================= */
+
+.tw {
+  max-height: 350px;
+  overflow: auto;
+  border: 1px solid #e6e8f0;
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+  min-width: 850px;
+}
+
+table th {
+  position: sticky;
+  top: 0;
+  background: #f0f2f8;
+  color: #4a4a6a;
+  text-align: left;
+  padding: 7px 8px;
+  border-bottom: 2px solid #e6e8f0;
+  font-size: 8px;
+  text-transform: uppercase;
+  font-weight: 700;
+  z-index: 2;
+}
+
+table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid #e6e8f0;
+  font-size: 10px;
+}
+
+table tr:hover td {
+  background: #fafaff;
+}
+
+.pill {
+  display: inline-flex;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.pill.g {
+  background: rgba(34,197,94,.12);
+  color: #15803d;
+}
+
+.pill.w {
+  background: rgba(245,158,11,.14);
+  color: #b45309;
+}
+
+.pill.b {
+  background: rgba(239,68,68,.12);
+  color: #b91c1c;
+}
+
+/* ================= MODAL ================= */
+
+.md {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+}
+
+.md.on {
+  display: flex;
+}
+
+.md-c {
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px 16px;
+  width: 100%;
+  max-width: 850px;
+  max-height: 95vh;
+  overflow: hidden;
+}
+
+.md-h {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.md-h h2 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.md-h .cl {
+  background: #f0f2f8;
+  border: 1px solid #e6e8f0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.md .ch {
+  height: 350px;
+}
+
+.md-acts {
+  display: flex;
+  gap: 5px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.md-acts button {
+  background: #f0f2f8;
+  border: 1px solid #e6e8f0;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 600;
+  color: #4a4a6a;
+}
+
+.md-acts button:hover {
+  background: #e5e7f1;
+}
+
+.md-acts .dl {
+  background: #6366f1;
+  color: #fff;
+  border-color: #6366f1;
+}
+
+/* ================= LOADING / ERROR ================= */
+
+.loading {
+  text-align: center;
+  padding: 50px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #6366f1;
+  background: #fff;
+  border-radius: 16px;
+}
+
+.loading i {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.err {
+  text-align: center;
+  padding: 40px 20px;
+  color: #dc2626;
+  font-size: 14px;
+  background: #fff;
+  border-radius: 16px;
+}
+
+.err i {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* ================= FOOTER ================= */
+
+.ft {
+  text-align: center;
+  padding: 16px;
+  color: #8a8aaa;
+  font-size: 10px;
+  border-top: 1px solid #e6e8f0;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (min-width: 480px) {
+
+  .stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cd-full {
+    grid-column: 1 / -1;
+  }
+
+  .insights {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .sc {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+
+  body {
+    padding: 20px;
+  }
+
+  .stats {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .st .n {
+    font-size: 24px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+}
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
 
+<!-- ================= HEADER ================= -->
+
 <div class="hd">
+
   <div class="hd-top">
+
     <div>
-      <h1><i class="fas fa-graduation-cap"></i>LMS Perception Dashboard</h1>
-      <p>Live data synced from Google Sheets</p>
+      <h1>
+        <i class="fas fa-graduation-cap"></i>
+        LMS Perception Dashboard
+      </h1>
+
+      <p>
+        Student Perception of Learning Management Systems in Higher Education
+      </p>
     </div>
-    <a class="hd-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSecj7leJ0LTbSFk9frW2UzJgdUoK2bAuAdpZKc_VmjO70PmuQ/viewform?usp=dialog" target="_blank">
-      <i class="fab fa-google"></i> Open Form
+
+    <a
+      class="hd-btn"
+      href="https://docs.google.com/forms/d/e/1FAIpQLSecj7leJ0LTbSFk9frW2UzJgdUoK2bAuAdpZKc_VmjO70PmuQ/viewform"
+      target="_blank"
+      rel="noopener"
+    >
+      <i class="fab fa-google"></i>
+      Open Form
     </a>
+
   </div>
+
   <div class="stats">
-    <div class="st"><div class="n" id="cTotal">0</div><div class="l">Total</div></div>
-    <div class="st"><div class="n" id="cUse">0.00</div><div class="l">Usefulness</div><div class="mb"><div class="f" id="cBU" style="width:0%"></div></div></div>
-    <div class="st"><div class="n" id="cEase">0.00</div><div class="l">Ease</div><div class="mb"><div class="f" id="cBE" style="width:0%"></div></div></div>
-    <div class="st"><div class="n" id="cRel">0.00</div><div class="l">Reliability</div><div class="mb"><div class="f" id="cBR" style="width:0%"></div></div></div>
-    <div class="st"><div class="n" id="cSat">0<span class="s">%</span></div><div class="l">Satisfaction</div><div class="mb"><div class="f" id="cBS" style="width:0%"></div></div></div>
-    <div class="st"><div class="n" id="cImp">0<span class="s">%</span></div><div class="l">Improvement</div><div class="mb"><div class="f" id="cBI" style="width:0%"></div></div></div>
+
+    <div class="st">
+      <div class="n" id="cTotal">0</div>
+      <div class="l">Total</div>
+    </div>
+
+    <div class="st">
+      <div class="n" id="cUse">0.00</div>
+      <div class="l">Usefulness</div>
+      <div class="mb">
+        <div class="f" id="cBU" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="st">
+      <div class="n" id="cEase">0.00</div>
+      <div class="l">Ease</div>
+      <div class="mb">
+        <div class="f" id="cBE" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="st">
+      <div class="n" id="cRel">0.00</div>
+      <div class="l">Reliability</div>
+      <div class="mb">
+        <div class="f" id="cBR" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="st">
+      <div class="n" id="cSat">
+        0<span class="s">%</span>
+      </div>
+      <div class="l">Satisfaction</div>
+      <div class="mb">
+        <div class="f" id="cBS" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="st">
+      <div class="n" id="cImp">
+        0<span class="s">%</span>
+      </div>
+      <div class="l">Improvement</div>
+      <div class="mb">
+        <div class="f" id="cBI" style="width:0%"></div>
+      </div>
+    </div>
+
   </div>
+
 </div>
 
-<div class="secttl"><i class="fas fa-chart-line"></i> Summary</div>
-<div class="insights">
-  <div class="ic g"><div class="ey">Sentiment</div><div class="hn" id="iSat">—</div><div class="dt" id="iSatD">Loading…</div></div>
-  <div class="ic i"><div class="ey">Strongest</div><div class="hn" id="iStr">—</div><div class="dt" id="iStrD">—</div></div>
-  <div class="ic r"><div class="ey">Priority Issue</div><div class="hn" id="iRisk">—</div><div class="dt" id="iRiskD">—</div></div>
-  <div class="ic w"><div class="ey">LMS Adoption</div><div class="hn" id="iAdopt">—</div><div class="dt" id="iAdoptD">—</div></div>
+<!-- ================= SUMMARY ================= -->
+
+<div class="secttl">
+  <i class="fas fa-chart-line"></i>
+  Summary
 </div>
+
+<div class="insights">
+
+  <div class="ic g">
+    <div class="ey">Sentiment</div>
+    <div class="hn" id="iSat">—</div>
+    <div class="dt" id="iSatD">Loading…</div>
+  </div>
+
+  <div class="ic i">
+    <div class="ey">Strongest</div>
+    <div class="hn" id="iStr">—</div>
+    <div class="dt" id="iStrD">—</div>
+  </div>
+
+  <div class="ic r">
+    <div class="ey">Priority Issue</div>
+    <div class="hn" id="iRisk">—</div>
+    <div class="dt" id="iRiskD">—</div>
+  </div>
+
+  <div class="ic w">
+    <div class="ey">LMS Adoption</div>
+    <div class="hn" id="iAdopt">—</div>
+    <div class="dt" id="iAdoptD">—</div>
+  </div>
+
+</div>
+
+<!-- ================= DASHBOARD ================= -->
 
 <div class="grid" id="grid">
-  <div class="loading"><i class="fas fa-spinner fa-spin"></i>Loading responses…</div>
-</div>
 
-<div class="ft"><i class="fas fa-database"></i> LMS Survey 2026 &bull; <i class="fas fa-users"></i> <span id="ftTotal">0</span> responses</div>
-
-</div>
-
-<div class="md" id="md" onclick="if(event.target===this)closeMd()">
-  <div class="md-c">
-    <div class="md-h"><h2 id="mdTtl">Chart</h2><button class="cl" onclick="closeMd()"><i class="fas fa-times"></i></button></div>
-    <div class="ch"><canvas id="mdC"></canvas></div>
-    <div class="md-acts">
-      <button onclick="mdType('pie')"><i class="fas fa-chart-pie"></i></button>
-      <button onclick="mdType('doughnut')"><i class="fas fa-circle"></i></button>
-      <button onclick="mdType('bar')"><i class="fas fa-chart-bar"></i></button>
-      <button onclick="mdType('line')"><i class="fas fa-chart-line"></i></button>
-      <button onclick="mdType('radar')"><i class="fas fa-chart-pie"></i></button>
-      <button class="dl" onclick="mdDL()"><i class="fas fa-image"></i></button>
-    </div>
+  <div class="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+    Loading responses…
   </div>
+
 </div>
+
+<!-- ================= FOOTER ================= -->
+
+<div class="ft">
+
+  <i class="fas fa-database"></i>
+  LMS Survey 2026
+
+  &bull;
+
+  <i class="fas fa-users"></i>
+
+  <span id="ftTotal">0</span>
+  responses
+
+</div>
+
+</div>
+
+
+<!-- ================= MODAL ================= -->
+
+<div
+  class="md"
+  id="md"
+  onclick="if(event.target === this) closeMd();"
+>
+
+  <div class="md-c">
+
+    <div class="md-h">
+
+      <h2 id="mdTtl">
+        Chart
+      </h2>
+
+      <button
+        class="cl"
+        onclick="closeMd()"
+        aria-label="Close"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+
+    </div>
+
+    <div class="ch">
+      <canvas id="mdC"></canvas>
+    </div>
+
+    <div class="md-acts">
+
+      <button onclick="mdType('pie')">
+        <i class="fas fa-chart-pie"></i>
+        Pie
+      </button>
+
+      <button onclick="mdType('doughnut')">
+        <i class="fas fa-circle"></i>
+        Doughnut
+      </button>
+
+      <button onclick="mdType('bar')">
+        <i class="fas fa-chart-bar"></i>
+        Bar
+      </button>
+
+      <button onclick="mdType('line')">
+        <i class="fas fa-chart-line"></i>
+        Line
+      </button>
+
+      <button onclick="mdType('radar')">
+        <i class="fas fa-chart-pie"></i>
+        Radar
+      </button>
+
+      <button
+        class="dl"
+        onclick="mdDL()"
+        title="Download chart"
+      >
+        <i class="fas fa-image"></i>
+        PNG
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
 
 <script>
-var RAW_URL = 'https://script.google.com/macros/s/AKfycbxzDfGgRIFxEECfddHhFn37S6IJVcHQXTgSCE4RfC_BdnNSk4Ftn91enbpse86LKzIrKg/exec';
-var API_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(RAW_URL);
 
-var rawData = [];
-var charts = {};
-var chartData = {};
-var showNums = {};
-var currentMd = '';
-var mdChart = null;
+/* =========================================================
+   CONFIGURATION
+========================================================= */
 
-function countBy(a,k){var c={};a.forEach(function(x){var v=x[k]||'Not Specified';c[v]=(c[v]||0)+1});return c}
-function avgBy(a,k,m){if(!a.length)return 0;return a.reduce(function(s,x){return s+(m[x[k]]!==undefined?m[x[k]]:0)},0)/a.length}
-function countProblems(a,k){var c={};a.forEach(function(x){(x[k]||'').split(',').forEach(function(p){var q=p.trim();if(q&&q!=='No major problems')c[q]=(c[q]||0)+1})});return c}
-function sortObj(o){return Object.entries(o).sort(function(a,b){return b[1]-a[1]})}
-function esc(v){return String(v||'').replace(/[&<>"']/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]})}
+/*
+ IMPORTANT:
+ Your Google Apps Script must be deployed as:
 
-var easeM={'Very Easy':5,'Easy':4,'Moderate':3,'Difficult':2,'Very Difficult':1};
-var usefulM={'Very Useful':5,'Useful':4,'Moderately Useful':3,'Not Useful':2,'Not at all Useful':1};
-var relM={'Very Reliable':5,'Reliable':4,'Sometimes Unreliable':3,'Unreliable':2,'Very Unreliable':1};
-var convM={'Very Convenient':5,'Convenient':4,'Moderately Convenient':3,'Difficult':2,"I don't submit assignments through LMS":0};
-var commM={'Yes':1,'No':0,'Sometimes':0.5};
-var trackM={'Yes':1,'No':0,'Sometimes':0.5};
+ Execute as: Me
+ Who has access: Anyone
 
-var COL={
-gender:['#4f46e5','#ec4899','#6b7280'],
-year:['#4f46e5','#6366f1','#818cf8','#a78bfa','#c4b5fd'],
-faculty:['#059669','#10b981','#34d399','#6ee7b7','#a7f3d0'],
-usage:['#22c55e','#ef4444'],
-platform:['#4f46e5','#6366f1','#818cf8','#a78bfa','#c4b5fd','#ddd6fe'],
-frequency:['#4f46e5','#6366f1','#818cf8','#a78bfa','#c4b5fd'],
-satisfaction:['#22c55e','#4ade80','#fbbf24','#f87171','#dc2626'],
-improve:['#22c55e','#fbbf24','#ef4444'],
-mobile:['#4f46e5','#818cf8','#fbbf24'],
-problems:['#dc2626','#ef4444','#f87171','#fca5a5','#fbbf24','#fcd34d','#f59e0b']
+ Replace RAW_URL if your Apps Script deployment changes.
+*/
+
+const RAW_URL =
+  "https://script.google.com/macros/s/AKfycbxzDfGgRIFxEECfddHhFn37S6IJVcHQXTgSCE4RfC_BdnNSk4Ftn91enbpse86LKzIrKg/exec";
+
+/*
+ AllOrigins is used as a CORS proxy.
+
+ If your Apps Script endpoint already supports CORS,
+ you can change this to:
+
+ const API_URL = RAW_URL;
+
+*/
+const API_URL =
+  "https://api.allorigins.win/raw?url=" +
+  encodeURIComponent(RAW_URL);
+
+
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
+
+let rawData = [];
+let charts = {};
+let chartData = {};
+let showNums = {};
+let currentMd = "";
+let mdChart = null;
+
+
+/* =========================================================
+   CHART COLORS
+========================================================= */
+
+const COL = {
+
+  gender: [
+    "#4f46e5",
+    "#ec4899",
+    "#6b7280"
+  ],
+
+  year: [
+    "#4f46e5",
+    "#6366f1",
+    "#818cf8",
+    "#a78bfa",
+    "#c4b5fd"
+  ],
+
+  faculty: [
+    "#059669",
+    "#10b981",
+    "#34d399",
+    "#6ee7b7",
+    "#a7f3d0"
+  ],
+
+  usage: [
+    "#22c55e",
+    "#ef4444"
+  ],
+
+  platform: [
+    "#4f46e5",
+    "#6366f1",
+    "#818cf8",
+    "#a78bfa",
+    "#c4b5fd",
+    "#ddd6fe"
+  ],
+
+  frequency: [
+    "#4f46e5",
+    "#6366f1",
+    "#818cf8",
+    "#a78bfa",
+    "#c4b5fd"
+  ],
+
+  satisfaction: [
+    "#22c55e",
+    "#4ade80",
+    "#fbbf24",
+    "#f87171",
+    "#dc2626"
+  ],
+
+  improve: [
+    "#22c55e",
+    "#f59e0b",
+    "#ef4444"
+  ],
+
+  mobile: [
+    "#4f46e5",
+    "#818cf8",
+    "#fbbf24"
+  ],
+
+  problems: [
+    "#dc2626",
+    "#ef4444",
+    "#f87171",
+    "#fca5a5",
+    "#fbbf24",
+    "#fcd34d",
+    "#f59e0b"
+  ],
+
+  perception: [
+    "#4f46e5",
+    "#059669",
+    "#d97706",
+    "#db2777",
+    "#7c3aed",
+    "#0d9488"
+  ]
 };
 
-function buildChart(id,type,labels,data,colors,show){
-show=show||false;
-var cv=document.getElementById(id);if(!cv)return null;
-if(charts[id]){charts[id].destroy();delete charts[id]}
-var isPie=type==='pie'||type==='doughnut';
-var isBar=type==='bar';
-var isLine=type==='line';
-var isRadar=type==='radar';
-var key=id.replace('Chart','');
-showNums[key]=show;
-var cfg={type:type,data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderColor:isPie?'#fff':colors,borderWidth:isPie?2:1,borderRadius:isBar?6:0,borderSkipped:isBar?false:undefined,tension:isLine?0.3:undefined,fill:isLine?true:false,pointRadius:isLine?3:undefined}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:isPie?'bottom':'top',labels:{font:{size:isPie?10:9,weight:'600'},padding:isPie?10:6,boxWidth:isPie?10:8},display:!isRadar},datalabels:{display:isPie&&show,color:'#fff',font:{weight:'bold',size:10},formatter:function(v,ctx){var t=ctx.dataset.data.reduce(function(a,b){return a+b},0);var p=t>0?((v/t)*100).toFixed(2):0;return v+' ('+p+'%)'},anchor:'center',align:'center'}},scales:isPie?undefined:{y:{beginAtZero:true,ticks:{stepSize:isBar?1:undefined,font:{size:9,weight:'600'}},grid:{color:'rgba(0,0,0,.06)'}},x:{ticks:{font:{size:9,weight:'600'}},grid:{display:false}}},cutout:type==='doughnut'?'55%':undefined}},plugins:isPie?[ChartDataLabels]:[]};
-if(isRadar){cfg.options.scales={r:{beginAtZero:true,ticks:{stepSize:1},pointLabels:{font:{size:9,weight:'600'}},grid:{color:'rgba(0,0,0,.06)'}}};cfg.options.plugins.legend.display=true;cfg.options.plugins.datalabels={display:false}}
-if(isBar&&show){cfg.options.plugins.datalabels={display:true,color:'#4a4a6a',font:{weight:'bold',size:9},anchor:'end',align:'end',offset:3,formatter:function(v){return v}}}
-charts[id]=new Chart(cv,cfg);return charts[id];
+
+/* =========================================================
+   VALUE MAPPINGS
+========================================================= */
+
+const easeM = {
+  "Very Easy": 5,
+  "Easy": 4,
+  "Moderate": 3,
+  "Difficult": 2,
+  "Very Difficult": 1
+};
+
+const usefulM = {
+  "Very Useful": 5,
+  "Useful": 4,
+  "Moderately Useful": 3,
+  "Not Useful": 2,
+  "Not at all Useful": 1
+};
+
+const relM = {
+  "Very Reliable": 5,
+  "Reliable": 4,
+  "Sometimes Unreliable": 3,
+  "Unreliable": 2,
+  "Very Unreliable": 1
+};
+
+const convM = {
+  "Very Convenient": 5,
+  "Convenient": 4,
+  "Moderately Convenient": 3,
+  "Difficult": 2,
+  "I don't submit assignments through LMS": 0
+};
+
+const commM = {
+  "Yes": 1,
+  "No": 0,
+  "Sometimes": 0.5
+};
+
+const trackM = {
+  "Yes": 1,
+  "No": 0,
+  "Sometimes": 0.5
+};
+
+
+/* =========================================================
+   UTILITY FUNCTIONS
+========================================================= */
+
+function cleanText(value) {
+
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  return String(value)
+    .trim()
+    .replace(/\s+/g, " ");
 }
 
-function render(){
-var total=rawData.length;
-var avgU=avgBy(rawData,'usefulness',usefulM);
-var avgE=avgBy(rawData,'ease',easeM);
-var avgR=avgBy(rawData,'reliability',relM);
-var avgC=avgBy(rawData,'assignmentConvenience',convM);
-var avgCm=avgBy(rawData,'teacherComm',commM);
-var avgT=avgBy(rawData,'tracking',trackM);
-var satP=(rawData.filter(function(d){return d.satisfaction==='Very Satisfied'||d.satisfaction==='Satisfied'}).length/total*100)||0;
-var impP=(rawData.filter(function(d){return d.improves==='Yes'}).length/total*100)||0;
 
-document.getElementById('cTotal').textContent=total;
-document.getElementById('ftTotal').textContent=total;
-document.getElementById('cUse').textContent=avgU.toFixed(2);
-document.getElementById('cEase').textContent=avgE.toFixed(2);
-document.getElementById('cRel').textContent=avgR.toFixed(2);
-document.getElementById('cSat').innerHTML=satP.toFixed(2)+'<span class="s">%</span>';
-document.getElementById('cImp').innerHTML=impP.toFixed(2)+'<span class="s">%</span>';
-document.getElementById('cBU').style.width=(avgU/5*100)+'%';
-document.getElementById('cBE').style.width=(avgE/5*100)+'%';
-document.getElementById('cBR').style.width=(avgR/5*100)+'%';
-document.getElementById('cBS').style.width=satP+'%';
-document.getElementById('cBI').style.width=impP+'%';
+function normalize(value) {
 
-document.getElementById('iSat').textContent=satP.toFixed(2)+'%';
-document.getElementById('iSatD').textContent=(rawData.filter(function(d){return d.satisfaction==='Very Satisfied'}).length+rawData.filter(function(d){return d.satisfaction==='Satisfied'}).length)+' of '+total+' satisfied.';
-var cs=[['Usefulness',avgU,5],['Ease',avgE,5],['Reliability',avgR,5],['Assignment',avgC,5],['Teacher Comm.',avgCm,1],['Tracking',avgT,1]];
-var st=cs.slice().sort(function(a,b){return (b[1]/b[2])-(a[1]/a[2])})[0];
-document.getElementById('iStr').textContent=st[0];
-document.getElementById('iStrD').textContent=st[1].toFixed(2)+' / '+st[2];
-var iss=sortObj(countProblems(rawData,'problems'));
-document.getElementById('iRisk').textContent=iss[0]?iss[0][0]:'No major issue';
-document.getElementById('iRiskD').textContent=iss[0]?iss[0][1]+' mentions':'—';
-var adopt=rawData.filter(function(d){return d.usesLMS==='Yes'}).length/total*100;
-document.getElementById('iAdopt').textContent=adopt.toFixed(2)+'%';
-document.getElementById('iAdoptD').textContent=rawData.filter(function(d){return d.usesLMS==='Yes'}).length+' of '+total+' use LMS.';
+  return cleanText(value)
+    .toLowerCase()
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'");
 
-var g=sortObj(countBy(rawData,'gender'));
-var y=sortObj(countBy(rawData,'year'));
-var f=sortObj(countBy(rawData,'faculty'));
-var u=sortObj(countBy(rawData,'usesLMS'));
-var p=sortObj(countBy(rawData,'platform'));
-var fr=sortObj(countBy(rawData,'frequency'));
-var so=['Very Satisfied','Satisfied','Neutral','Dissatisfied','Very Dissatisfied'];
-var ss=sortObj(countBy(rawData,'satisfaction'));
-var sl=so.filter(function(l){return ss.some(function(d){return d[0]===l})});
-var sd=sl.map(function(l){var x=ss.find(function(d){return d[0]===l});return x?x[1]:0});
-var im=sortObj(countBy(rawData,'improves'));
-var m=sortObj(countBy(rawData,'mobileAccess'));
-var pr=sortObj(countProblems(rawData,'problems'));
-
-chartData.gender={labels:g.map(function(d){return d[0]}),data:g.map(function(d){return d[1]}),colors:COL.gender};
-chartData.year={labels:y.map(function(d){return d[0]}),data:y.map(function(d){return d[1]}),colors:COL.year};
-chartData.faculty={labels:f.map(function(d){return d[0]}),data:f.map(function(d){return d[1]}),colors:COL.faculty};
-chartData.usage={labels:u.map(function(d){return d[0]==='Yes'?'Use LMS':'Do Not Use'}),data:u.map(function(d){return d[1]}),colors:COL.usage};
-chartData.platform={labels:p.map(function(d){return d[0]||'Not Specified'}),data:p.map(function(d){return d[1]}),colors:COL.platform};
-chartData.frequency={labels:fr.map(function(d){return d[0]}),data:fr.map(function(d){return d[1]}),colors:COL.frequency};
-chartData.perception={labels:['Usefulness','Ease','Reliability','Assignment','Teacher Comm.','Tracking'],data:[avgU,avgE,avgR,avgC,avgCm,avgT],colors:['#4f46e5','#059669','#d97706','#db2777','#7c3aed','#0d9488']};
-chartData.satisfaction={labels:sl,data:sd,colors:COL.satisfaction};
-chartData.improve={labels:im.map(function(d){return d[0]}),data:im.map(function(d){return d[1]}),colors:im.map(function(d){return d[0]==='Yes'?'#22c55e':d[0]==='To some extent'?'#f59e0b':'#ef4444'})};
-chartData.mobile={labels:m.map(function(d){return d[0]}),data:m.map(function(d){return d[1]}),colors:COL.mobile};
-chartData.problems={labels:pr.map(function(d){return d[0]}),data:pr.map(function(d){return d[1]}),colors:COL.problems};
-
-var G=document.getElementById('grid');
-G.innerHTML='';
-var cards=[
-{id:'gender',ttl:'Gender',icon:'fa-venus-mars',types:['doughnut','pie','bar']},
-{id:'year',ttl:'Academic Year',icon:'fa-users',types:['doughnut','pie','bar']},
-{id:'faculty',ttl:'Faculty',icon:'fa-building-columns',types:['doughnut','pie','bar']},
-{id:'usage',ttl:'LMS Adoption',icon:'fa-check-circle',types:['doughnut','pie','bar']},
-{id:'platform',ttl:'Platform',icon:'fa-laptop',types:['bar','pie','doughnut']},
-{id:'frequency',ttl:'Frequency',icon:'fa-clock',types:['bar','pie','doughnut']},
-{id:'perception',ttl:'Perception Scores',icon:'fa-star',full:true,scores:true,types:['bar','line','radar']},
-{id:'satisfaction',ttl:'Satisfaction',icon:'fa-smile',full:true,types:['bar','pie','doughnut']},
-{id:'improve',ttl:'Improvement',icon:'fa-graduation-cap',types:['doughnut','pie','bar']},
-{id:'mobile',ttl:'Mobile Access',icon:'fa-mobile-alt',types:['doughnut','pie','bar']},
-{id:'problems',ttl:'Challenges',icon:'fa-exclamation-triangle',full:true,types:['bar','pie','doughnut']}
-];
-cards.forEach(function(c){
-var div=document.createElement('div');
-div.className='cd'+(c.full?' cd-full':'');
-div.dataset.chart=c.id;
-var scHtml='';
-if(c.scores){
-scHtml='<div class="sc">'+
-'<div class="sc-i"><div class="v">'+avgU.toFixed(2)+' <span class="m">/5</span></div><div class="l">Usefulness</div><div class="bg"><div class="fl us" style="width:'+(avgU/5*100)+'%"></div></div></div>'+
-'<div class="sc-i"><div class="v">'+avgE.toFixed(2)+' <span class="m">/5</span></div><div class="l">Ease</div><div class="bg"><div class="fl ea" style="width:'+(avgE/5*100)+'%"></div></div></div>'+
-'<div class="sc-i"><div class="v">'+avgR.toFixed(2)+' <span class="m">/5</span></div><div class="l">Reliability</div><div class="bg"><div class="fl re" style="width:'+(avgR/5*100)+'%"></div></div></div>'+
-'<div class="sc-i"><div class="v">'+avgC.toFixed(2)+' <span class="m">/5</span></div><div class="l">Assignment</div><div class="bg"><div class="fl co" style="width:'+(avgC/5*100)+'%"></div></div></div>'+
-'<div class="sc-i"><div class="v">'+avgCm.toFixed(2)+' <span class="m">/1</span></div><div class="l">Teacher Comm.</div><div class="bg"><div class="fl cm" style="width:'+(avgCm*100)+'%"></div></div></div>'+
-'<div class="sc-i"><div class="v">'+avgT.toFixed(2)+' <span class="m">/1</span></div><div class="l">Tracking</div><div class="bg"><div class="fl tr" style="width:'+(avgT*100)+'%"></div></div></div>'+
-'</div>';
-}
-var btnHtml='<div class="bts" onclick="event.stopPropagation();">'+
-c.types.map(function(t,i){
-return '<button class="bt'+(i===0?' on':'')+'" onclick="switchType(\''+c.id+'\',\''+t+'\',event)"><i class="fas fa-'+(t==='bar'?'chart-bar':t==='pie'?'chart-pie':t==='line'?'chart-line':t==='radar'?'chart-pie':'circle')+'"></i></button>';
-}).join('')+
-'</div>';
-div.innerHTML=
-'<div class="cd-hd"><h3><i class="fas '+c.icon+'"></i>'+c.ttl+'</h3>'+btnHtml+'</div>'+
-scHtml+
-'<div class="ch'+(c.full?' t':'')+'"><canvas id="'+c.id+'Chart"></canvas></div>'+
-'<div class="hint"><span id="hint-'+c.id+'">👆 Tap to expand</span></div>';
-div.addEventListener('click',function(){openCard(c.id)});
-G.appendChild(div);
-var d=chartData[c.id];
-buildChart(c.id+'Chart',c.types[0],d.labels,d.data,d.colors,false);
-});
-
-var p2=document.createElement('div');
-p2.className='cd cd-full';
-p2.innerHTML='<div class="cd-hd"><h3><i class="fas fa-table"></i>Responses ('+total+')</h3></div>'+
-'<div class="tw"><table><thead><tr><th>#</th><th>Faculty</th><th>Year</th><th>Gender</th><th>LMS</th><th>Platform</th><th>Frequency</th><th>Useful</th><th>Ease</th><th>Reliable</th><th>Satisfaction</th></tr></thead><tbody>'+
-rawData.map(function(d,i){
-var sc=(d.satisfaction==='Very Satisfied'||d.satisfaction==='Satisfied')?'g':(d.satisfaction==='Neutral'?'w':'b');
-var uc=d.usesLMS==='Yes'?'g':'w';
-return '<tr><td>'+(i+1)+'</td><td>'+esc(d.faculty)+'</td><td>'+esc(d.year)+'</td><td>'+esc(d.gender)+'</td><td><span class="pill '+uc+'">'+esc(d.usesLMS)+'</span></td><td>'+esc(d.platform||'—')+'</td><td>'+esc(d.frequency)+'</td><td>'+esc(d.usefulness)+'</td><td>'+esc(d.ease)+'</td><td>'+esc(d.reliability)+'</td><td><span class="pill '+sc+'">'+esc(d.satisfaction)+'</span></td></tr>';
-}).join('')+
-'</tbody></table></div>';
-G.appendChild(p2);
 }
 
-function switchType(id,type,ev){
-ev.stopPropagation();
-var d=chartData[id];if(!d)return;
-buildChart(id+'Chart',type,d.labels,d.data,d.colors,showNums[id]||false);
-var cd=document.querySelector('[data-chart="'+id+'"]');
-if(cd){cd.querySelectorAll('.bt').forEach(function(b){b.classList.remove('on')});ev.target.closest('.bt').classList.add('on')}
+
+function countBy(array, key) {
+
+  const result = {};
+
+  array.forEach(item => {
+
+    const value =
+      cleanText(item[key]) || "Not Specified";
+
+    result[value] =
+      (result[value] || 0) + 1;
+
+  });
+
+  return result;
 }
 
-function openCard(id){
-var d=chartData[id];if(!d)return;
-currentMd=id;
-var ttl=document.querySelector('[data-chart="'+id+'"] h3');
-document.getElementById('mdTtl').textContent=ttl?ttl.textContent:id;
-document.getElementById('md').classList.add('on');
-var show=showNums[id]||false;
-if(mdChart){mdChart.destroy();mdChart=null}
-mdChart=buildChart('mdC','doughnut',d.labels,d.data,d.colors,show);
-}
-function closeMd(){
-if(currentMd){showNums[currentMd]=false;var d=chartData[currentMd];if(d)buildChart(currentMd+'Chart',getActiveType(currentMd),d.labels,d.data,d.colors,false);var h=document.getElementById('hint-'+currentMd);if(h)h.textContent='👆 Tap to expand'}
-document.getElementById('md').classList.remove('on');
-if(mdChart){mdChart.destroy();mdChart=null}
-}
-function getActiveType(id){var cd=document.querySelector('[data-chart="'+id+'"]');if(cd){var on=cd.querySelector('.bt.on');if(on){var o=on.getAttribute('onclick')||'';if(o.indexOf('pie')>-1)return 'pie';if(o.indexOf('doughnut')>-1)return 'doughnut';if(o.indexOf('bar')>-1)return 'bar';if(o.indexOf('line')>-1)return 'line';if(o.indexOf('radar')>-1)return 'radar'}}return 'doughnut'}
-function mdType(type){var d=chartData[currentMd];if(!d||!mdChart)return;mdChart.destroy();mdChart=buildChart('mdC',type,d.labels,d.data,d.colors,showNums[currentMd]||false)}
-function mdDL(){var c=document.getElementById('mdC');var l=document.createElement('a');l.download='chart_'+currentMd+'.png';l.href=c.toDataURL('image/png');l.click()}
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMd()});
 
-function load(){
-var G=document.getElementById('grid');
-fetch(API_URL)
-.then(function(res){return res.json()})
-.then(function(data){
-if(!Array.isArray(data)){throw new Error('API returned: '+JSON.stringify(data).slice(0,100))}
-rawData=data;
-render();
-console.log('✅ Loaded '+rawData.length+' responses');
-})
-.catch(function(err){
-console.error(err);
-G.innerHTML='<div class="err"><i class="fas fa-exclamation-triangle"></i>Could not load data.<br><small>'+esc(err.message)+'</small></div>';
-});
+function avgBy(array, key, mapping) {
+
+  const values = [];
+
+  array.forEach(item => {
+
+    const value = cleanText(item[key]);
+
+    if (
+      value &&
+      Object.prototype.hasOwnProperty.call(mapping, value)
+    ) {
+      values.push(mapping[value]);
+    }
+
+  });
+
+  if (!values.length) {
+    return 0;
+  }
+
+  return values.reduce(
+    (sum, value) => sum + value,
+    0
+  ) / values.length;
 }
+
+
+function countProblems(array, key) {
+
+  const result = {};
+
+  array.forEach(item => {
+
+    const text = cleanText(item[key]);
+
+    if (!text) {
+      return;
+    }
+
+    text
+      .split(/[,;|]/)
+      .map(x => cleanText(x))
+      .filter(Boolean)
+      .forEach(problem => {
+
+        if (
+          normalize(problem) ===
+          normalize("No major problems")
+        ) {
+          return;
+        }
+
+        result[problem] =
+          (result[problem] || 0) + 1;
+
+      });
+
+  });
+
+  return result;
+}
+
+
+function sortObj(object) {
+
+  return Object.entries(object)
+    .sort((a, b) => b[1] - a[1]);
+}
+
+
+function esc(value) {
+
+  return String(value ?? "")
+    .replace(/[&<>"']/g, match => {
+
+      const map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      };
+
+      return map[match];
+
+    });
+
+}
+
+
+/* =========================================================
+   GET FIELD
+========================================================= */
+
+/*
+ Allows the dashboard to continue working if the
+ Google Sheet uses slightly different column names.
+*/
+
+function getField(row, possibleNames) {
+
+  const rowKeys = Object.keys(row);
+
+  for (const wanted of possibleNames) {
+
+    const wantedNormalized =
+      normalize(wanted);
+
+    const exactKey =
+      rowKeys.find(
+        key => normalize(key) === wantedNormalized
+      );
+
+    if (exactKey) {
+      return cleanText(row[exactKey]);
+    }
+
+  }
+
+  for (const wanted of possibleNames) {
+
+    const wantedNormalized =
+      normalize(wanted);
+
+    const partialKey =
+      rowKeys.find(
+        key =>
+          normalize(key).includes(wantedNormalized)
+      );
+
+    if (partialKey) {
+      return cleanText(row[partialKey]);
+    }
+
+  }
+
+  return "";
+}
+
+
+/* =========================================================
+   NORMALIZE GOOGLE SHEET DATA
+========================================================= */
+
+function normalizeRow(row) {
+
+  return {
+
+    gender: getField(row, [
+      "Gender"
+    ]),
+
+    year: getField(row, [
+      "Year",
+      "Year of Study",
+      "Academic Year",
+      "Class",
+      "Study Year"
+    ]),
+
+    faculty: getField(row, [
+      "Faculty",
+      "Field of Study",
+      "Department",
+      "Course",
+      "Programme",
+      "Program"
+    ]),
+
+    usesLMS: getField(row, [
+      "Uses LMS",
+      "Use LMS",
+      "Do you use LMS",
+      "LMS Usage",
+      "LMS"
+    ]),
+
+    platform: getField(row, [
+      "Platform",
+      "Primary LMS Platform",
+      "LMS Platform"
+    ]),
+
+    frequency: getField(row, [
+      "Frequency",
+      "Frequency of LMS Use",
+      "How often do you use LMS"
+    ]),
+
+    usefulness: getField(row, [
+      "Usefulness",
+      "Perceived Usefulness",
+      "LMS Usefulness"
+    ]),
+
+    ease: getField(row, [
+      "Ease",
+      "Ease of Use",
+      "Perceived Ease of Use"
+    ]),
+
+    reliability: getField(row, [
+      "Reliability",
+      "LMS Reliability"
+    ]),
+
+    assignmentConvenience: getField(row, [
+      "Assignment Convenience",
+      "Assignment",
+      "Assignment Convenience through LMS",
+      "Convenience"
+    ]),
+
+    teacherComm: getField(row, [
+      "Teacher Communication",
+      "Teacher Comm.",
+      "Teacher Communication through LMS",
+      "Communication"
+    ]),
+
+    tracking: getField(row, [
+      "Tracking",
+      "Progress Tracking",
+      "LMS Tracking"
+    ]),
+
+    satisfaction: getField(row, [
+      "Satisfaction",
+      "Overall Satisfaction",
+      "LMS Satisfaction"
+    ]),
+
+    improves: getField(row, [
+      "Improvement",
+      "Improves Learning",
+      "Learning Improvement",
+      "Does LMS improve learning"
+    ]),
+
+    mobileAccess: getField(row, [
+      "Mobile Access",
+      "Mobile",
+      "Access LMS through mobile"
+    ]),
+
+    problems: getField(row, [
+      "Problems",
+      "Challenges",
+      "Problems with LMS",
+      "Challenges faced"
+    ])
+
+  };
+
+}
+
+
+/* =========================================================
+   CREATE CHART
+========================================================= */
+
+function buildChart(
+  id,
+  type,
+  labels,
+  data,
+  colors,
+  show = false
+) {
+
+  const canvas =
+    document.getElementById(id);
+
+  if (!canvas) {
+    return null;
+  }
+
+  if (charts[id]) {
+
+    try {
+      charts[id].destroy();
+    } catch (error) {
+      console.warn(
+        "Chart destroy error:",
+        error
+      );
+    }
+
+    delete charts[id];
+
+  }
+
+  const isPie =
+    type === "pie" ||
+    type === "doughnut";
+
+  const isBar =
+    type === "bar";
+
+  const isLine =
+    type === "line";
+
+  const isRadar =
+    type === "radar";
+
+  const key =
+    id.replace("Chart", "");
+
+  showNums[key] = show;
+
+  const safeColors =
+    Array.from(
+      { length: labels.length },
+      (_, index) =>
+        colors[index % colors.length]
+    );
+
+  const config = {
+
+    type: type,
+
+    data: {
+
+      labels: labels,
+
+      datasets: [
+        {
+
+          data: data,
+
+          backgroundColor: safeColors,
+
+          borderColor:
+            isPie
+              ? "#ffffff"
+              : safeColors,
+
+          borderWidth:
+            isPie
+              ? 2
+              : 1,
+
+          borderRadius:
+            isBar
+              ? 6
+              : 0,
+
+          borderSkipped:
+            isBar
+              ? false
+              : undefined,
+
+          tension:
+            isLine
+              ? 0.3
+              : undefined,
+
+          fill:
+            isLine
+              ? true
+              : false,
+
+          pointRadius:
+            isLine
+              ? 3
+              : undefined
+
+        }
+      ]
+
+    },
+
+    options: {
+
+      responsive: true,
+
+      maintainAspectRatio: false,
+
+      animation: {
+        duration: 400
+      },
+
+      plugins: {
+
+        legend: {
+
+          position:
+            isPie
+              ? "bottom"
+              : "top",
+
+          display:
+            !isRadar,
+
+          labels: {
+
+            font: {
+              size: isPie ? 10 : 9,
+              weight: "600"
+            },
+
+            padding:
+              isPie ? 10 : 6,
+
+            boxWidth:
+              isPie ? 10 : 8
+
+          }
+
+        },
+
+        tooltip: {
+
+          enabled: true
+
+        },
+
+        datalabels: {
+
+          display:
+            isPie && show,
+
+          color: "#ffffff",
+
+          font: {
+            weight: "bold",
+            size: 10
+          },
+
+          formatter: function(value, context) {
+
+            const total =
+              context.dataset.data
+                .reduce(
+                  (a, b) =>
+                    Number(a) + Number(b),
+                  0
+                );
+
+            const percentage =
+              total > 0
+                ? ((value / total) * 100).toFixed(1)
+                : "0";
+
+            return (
+              value +
+              " (" +
+              percentage +
+              "%)"
+            );
+
+          },
+
+          anchor: "center",
+
+          align: "center"
+
+        }
+
+      },
+
+      scales:
+        isPie
+          ? undefined
+          : {
+
+              y: {
+
+                beginAtZero: true,
+
+                ticks: {
+
+                  stepSize:
+                    isBar
+                      ? 1
+                      : undefined,
+
+                  font: {
+                    size: 9,
+                    weight: "600"
+                  }
+
+                },
+
+                grid: {
+                  color: "rgba(0,0,0,.06)"
+                }
+
+              },
+
+              x: {
+
+                ticks: {
+
+                  font: {
+                    size: 9,
+                    weight: "600"
+                  }
+
+                },
+
+                grid: {
+                  display: false
+                }
+
+              }
+
+            },
+
+      cutout:
+        type === "doughnut"
+          ? "55%"
+          : undefined
+
+    },
+
+    plugins:
+      isPie
+        ? [ChartDataLabels]
+        : []
+
+  };
+
+
+  if (isRadar) {
+
+    config.options.scales = {
+
+      r: {
+
+        beginAtZero: true,
+
+        suggestedMax: 5,
+
+        ticks: {
+          stepSize: 1
+        },
+
+        pointLabels: {
+
+          font: {
+            size: 9,
+            weight: "600"
+          }
+
+        },
+
+        grid: {
+          color: "rgba(0,0,0,.06)"
+        }
+
+      }
+
+    };
+
+    config.options.plugins.legend.display = true;
+
+    config.options.plugins.datalabels = {
+      display: false
+    };
+
+  }
+
+
+  if (isBar && show) {
+
+    config.options.plugins.datalabels = {
+
+      display: true,
+
+      color: "#4a4a6a",
+
+      font: {
+        weight: "bold",
+        size: 9
+      },
+
+      anchor: "end",
+
+      align: "end",
+
+      offset: 3,
+
+      formatter: value => value
+
+    };
+
+  }
+
+
+  try {
+
+    charts[id] =
+      new Chart(
+        canvas,
+        config
+      );
+
+    return charts[id];
+
+  } catch (error) {
+
+    console.error(
+      "Chart creation error:",
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER DASHBOARD
+========================================================= */
+
+function render() {
+
+  const total =
+    rawData.length;
+
+  if (!total) {
+
+    document.getElementById("grid").innerHTML =
+      '<div class="err">' +
+      '<i class="fas fa-database"></i>' +
+      "No survey responses found." +
+      "</div>";
+
+    updateStats(0, 0, 0, 0, 0, 0);
+
+    return;
+
+  }
+
+
+  /* ================= SCORES ================= */
+
+  const avgU =
+    avgBy(
+      rawData,
+      "usefulness",
+      usefulM
+    );
+
+  const avgE =
+    avgBy(
+      rawData,
+      "ease",
+      easeM
+    );
+
+  const avgR =
+    avgBy(
+      rawData,
+      "reliability",
+      relM
+    );
+
+  const avgC =
+    avgBy(
+      rawData,
+      "assignmentConvenience",
+      convM
+    );
+
+  const avgCm =
+    avgBy(
+      rawData,
+      "teacherComm",
+      commM
+    );
+
+  const avgT =
+    avgBy(
+      rawData,
+      "tracking",
+      trackM
+    );
+
+
+  /* ================= SATISFACTION ================= */
+
+  const satisfiedCount =
+    rawData.filter(item => {
+
+      const value =
+        normalize(item.satisfaction);
+
+      return (
+        value === "very satisfied" ||
+        value === "satisfied"
+      );
+
+    }).length;
+
+
+  const satP =
+    total > 0
+      ? (satisfiedCount / total) * 100
+      : 0;
+
+
+  /* ================= IMPROVEMENT ================= */
+
+  const improvementCount =
+    rawData.filter(item =>
+      normalize(item.improves) === "yes"
+    ).length;
+
+
+  const impP =
+    total > 0
+      ? (improvementCount / total) * 100
+      : 0;
+
+
+  updateStats(
+    total,
+    avgU,
+    avgE,
+    avgR,
+    satP,
+    impP
+  );
+
+
+  /* ================= SUMMARY ================= */
+
+  document.getElementById("iSat")
+    .textContent =
+      satP.toFixed(2) + "%";
+
+
+  document.getElementById("iSatD")
+    .textContent =
+      satisfiedCount +
+      " of " +
+      total +
+      " satisfied.";
+
+
+  const scoreSet = [
+
+    ["Usefulness", avgU, 5],
+
+    ["Ease", avgE, 5],
+
+    ["Reliability", avgR, 5],
+
+    ["Assignment", avgC, 5],
+
+    ["Teacher Comm.", avgCm, 1],
+
+    ["Tracking", avgT, 1]
+
+  ];
+
+
+  const strongest =
+    scoreSet
+      .slice()
+      .sort(
+        (a, b) =>
+          (b[1] / b[2]) -
+          (a[1] / a[2])
+      )[0];
+
+
+  document.getElementById("iStr")
+    .textContent =
+      strongest[0];
+
+
+  document.getElementById("iStrD")
+    .textContent =
+      strongest[1].toFixed(2) +
+      " / " +
+      strongest[2];
+
+
+  /* ================= PROBLEMS ================= */
+
+  const issues =
+    sortObj(
+      countProblems(
+        rawData,
+        "problems"
+      )
+    );
+
+
+  document.getElementById("iRisk")
+    .textContent =
+      issues.length
+        ? issues[0][0]
+        : "No major issue";
+
+
+  document.getElementById("iRiskD")
+    .textContent =
+      issues.length
+        ? issues[0][1] + " mentions"
+        : "—";
+
+
+  /* ================= ADOPTION ================= */
+
+  const adoptionCount =
+    rawData.filter(item =>
+      normalize(item.usesLMS) === "yes"
+    ).length;
+
+
+  const adoption =
+    total > 0
+      ? (adoptionCount / total) * 100
+      : 0;
+
+
+  document.getElementById("iAdopt")
+    .textContent =
+      adoption.toFixed(2) + "%";
+
+
+  document.getElementById("iAdoptD")
+    .textContent =
+      adoptionCount +
+      " of " +
+      total +
+      " use LMS.";
+
+
+  /* ================= COUNTS ================= */
+
+  const gender =
+    sortObj(
+      countBy(rawData, "gender")
+    );
+
+  const year =
+    sortObj(
+      countBy(rawData, "year")
+    );
+
+  const faculty =
+    sortObj(
+      countBy(rawData, "faculty")
+    );
+
+  const usage =
+    sortObj(
+      countBy(rawData, "usesLMS")
+    );
+
+  const platform =
+    sortObj(
+      countBy(rawData, "platform")
+    );
+
+  const frequency =
+    sortObj(
+      countBy(rawData, "frequency")
+    );
+
+
+  /* ================= SATISFACTION ================= */
+
+  const satisfactionOrder = [
+
+    "Very Satisfied",
+    "Satisfied",
+    "Neutral",
+    "Dissatisfied",
+    "Very Dissatisfied"
+
+  ];
+
+
+  const satisfactionCounts =
+    countBy(
+      rawData,
+      "satisfaction"
+    );
+
+
+  const satisfactionLabels =
+    satisfactionOrder.filter(
+      label =>
+        Object.prototype.hasOwnProperty.call(
+          satisfactionCounts,
+          label
+        )
+    );
+
+
+  const satisfactionData =
+    satisfactionLabels.map(
+      label =>
+        satisfactionCounts[label]
+    );
+
+
+  /* ================= IMPROVEMENT ================= */
+
+  const improvement =
+    sortObj(
+      countBy(
+        rawData,
+        "improves"
+      )
+    );
+
+
+  /* ================= MOBILE ================= */
+
+  const mobile =
+    sortObj(
+      countBy(
+        rawData,
+        "mobileAccess"
+      )
+    );
+
+
+  /* ================= PROBLEMS ================= */
+
+  const problems =
+    sortObj(
+      countProblems(
+        rawData,
+        "problems"
+      )
+    );
+
+
+  /* ================= CHART DATA ================= */
+
+  chartData.gender = {
+    labels: gender.map(x => x[0]),
+    data: gender.map(x => x[1]),
+    colors: COL.gender
+  };
+
+
+  chartData.year = {
+    labels: year.map(x => x[0]),
+    data: year.map(x => x[1]),
+    colors: COL.year
+  };
+
+
+  chartData.faculty = {
+    labels: faculty.map(x => x[0]),
+    data: faculty.map(x => x[1]),
+    colors: COL.faculty
+  };
+
+
+  chartData.usage = {
+
+    labels:
+      usage.map(x =>
+        normalize(x[0]) === "yes"
+          ? "Use LMS"
+          : "Do Not Use"
+      ),
+
+    data:
+      usage.map(x => x[1]),
+
+    colors: COL.usage
+
+  };
+
+
+  chartData.platform = {
+
+    labels:
+      platform.map(
+        x =>
+          x[0] ||
+          "Not Specified"
+      ),
+
+    data:
+      platform.map(x => x[1]),
+
+    colors: COL.platform
+
+  };
+
+
+  chartData.frequency = {
+
+    labels:
+      frequency.map(
+        x => x[0]
+      ),
+
+    data:
+      frequency.map(
+        x => x[1]
+      ),
+
+    colors: COL.frequency
+
+  };
+
+
+  chartData.perception = {
+
+    labels: [
+
+      "Usefulness",
+      "Ease",
+      "Reliability",
+      "Assignment",
+      "Teacher Comm.",
+      "Tracking"
+
+    ],
+
+    data: [
+
+      avgU,
+      avgE,
+      avgR,
+      avgC,
+      avgCm,
+      avgT
+
+    ],
+
+    colors: COL.perception
+
+  };
+
+
+  chartData.satisfaction = {
+
+    labels:
+      satisfactionLabels,
+
+    data:
+      satisfactionData,
+
+    colors:
+      COL.satisfaction
+
+  };
+
+
+  chartData.improve = {
+
+    labels:
+      improvement.map(
+        x => x[0]
+      ),
+
+    data:
+      improvement.map(
+        x => x[1]
+      ),
+
+    colors:
+      improvement.map(
+        x => {
+
+          if (
+            normalize(x[0]) ===
+            "yes"
+          ) {
+            return "#22c55e";
+          }
+
+          if (
+            normalize(x[0]).includes(
+              "some extent"
+            )
+          ) {
+            return "#f59e0b";
+          }
+
+          return "#ef4444";
+
+        }
+      )
+
+  };
+
+
+  chartData.mobile = {
+
+    labels:
+      mobile.map(
+        x => x[0]
+      ),
+
+    data:
+      mobile.map(
+        x => x[1]
+      ),
+
+    colors:
+      COL.mobile
+
+  };
+
+
+  chartData.problems = {
+
+    labels:
+      problems.map(
+        x => x[0]
+      ),
+
+    data:
+      problems.map(
+        x => x[1]
+      ),
+
+    colors:
+      COL.problems
+
+  };
+
+
+  /* ================= BUILD CARDS ================= */
+
+  const grid =
+    document.getElementById("grid");
+
+  grid.innerHTML = "";
+
+
+  const cards = [
+
+    {
+      id: "gender",
+      ttl: "Gender",
+      icon: "fa-venus-mars",
+      types: [
+        "doughnut",
+        "pie",
+        "bar"
+      ]
+    },
+
+    {
+      id: "year",
+      ttl: "Academic Year",
+      icon: "fa-users",
+      types: [
+        "doughnut",
+        "pie",
+        "bar"
+      ]
+    },
+
+    {
+      id: "faculty",
+      ttl: "Faculty",
+      icon: "fa-building-columns",
+      types: [
+        "doughnut",
+        "pie",
+        "bar"
+      ]
+    },
+
+    {
+      id: "usage",
+      ttl: "LMS Adoption",
+      icon: "fa-check-circle",
+      types: [
+        "doughnut",
+        "pie",
+        "bar"
+      ]
+    },
+
+    {
+      id: "platform",
+      ttl: "LMS Platform",
+      icon: "fa-laptop",
+      types: [
+        "bar",
+        "pie",
+        "doughnut"
+      ]
+    },
+
+    {
+      id: "frequency",
+      ttl: "Usage Frequency",
+      icon: "fa-clock",
+      types: [
+        "bar",
+        "pie",
+        "doughnut"
+      ]
+    },
+
+    {
+      id: "perception",
+      ttl: "Perception Scores",
+      icon: "fa-star",
+      full: true,
+      scores: true,
+      types: [
+        "bar",
+        "line",
+        "radar"
+      ]
+    },
+
+    {
+      id: "satisfaction",
+      ttl: "Satisfaction",
+      icon: "fa-smile",
+      full: true,
+      types: [
+        "bar",
+        "pie",
+        "doughnut"
+      ]
+    },
+
+    {
+      id: "improve",
+      ttl: "Learning Improvement",
+      icon: "fa-graduation-cap",
+      types: [
+        "doughnut",
+        "pie",
+        "bar"
+      ]
+    },
+
+    {
+      id: "mobile",
+      ttl: "Mobile Access",
+      icon: "fa-mobile-screen",
+      types: [
+        "doughnut",
+        "pie",
+        "bar"
+      ]
+    },
+
+    {
+      id: "problems",
+      ttl: "Challenges",
+      icon: "fa-exclamation-triangle",
+      full: true,
+      types: [
+        "bar",
+        "pie",
+        "doughnut"
+      ]
+    }
+
+  ];
+
+
+  cards.forEach(card => {
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "cd" +
+      (
+        card.full
+          ? " cd-full"
+          : ""
+      );
+
+    div.dataset.chart =
+      card.id;
+
+
+    let scoreHTML = "";
+
+
+    /* ================= SCORE HTML ================= */
+
+    if (card.scores) {
+
+      scoreHTML = `
+
+        <div class="sc">
+
+          <div class="sc-i">
+            <div class="v">
+              ${avgU.toFixed(2)}
+              <span class="m">/5</span>
+            </div>
+
+            <div class="l">
+              Usefulness
+            </div>
+
+            <div class="bg">
+              <div
+                class="fl us"
+                style="width:${avgU / 5 * 100}%"
+              ></div>
+            </div>
+          </div>
+
+
+          <div class="sc-i">
+            <div class="v">
+              ${avgE.toFixed(2)}
+              <span class="m">/5</span>
+            </div>
+
+            <div class="l">
+              Ease
+            </div>
+
+            <div class="bg">
+              <div
+                class="fl ea"
+                style="width:${avgE / 5 * 100}%"
+              ></div>
+            </div>
+          </div>
+
+
+          <div class="sc-i">
+            <div class="v">
+              ${avgR.toFixed(2)}
+              <span class="m">/5</span>
+            </div>
+
+            <div class="l">
+              Reliability
+            </div>
+
+            <div class="bg">
+              <div
+                class="fl re"
+                style="width:${avgR / 5 * 100}%"
+              ></div>
+            </div>
+          </div>
+
+
+          <div class="sc-i">
+            <div class="v">
+              ${avgC.toFixed(2)}
+              <span class="m">/5</span>
+            </div>
+
+            <div class="l">
+              Assignment
+            </div>
+
+            <div class="bg">
+              <div
+                class="fl co"
+                style="width:${avgC / 5 * 100}%"
+              ></div>
+            </div>
+          </div>
+
+
+          <div class="sc-i">
+            <div class="v">
+              ${avgCm.toFixed(2)}
+              <span class="m">/1</span>
+            </div>
+
+            <div class="l">
+              Teacher Comm.
+            </div>
+
+            <div class="bg">
+              <div
+                class="fl cm"
+                style="width:${avgCm * 100}%"
+              ></div>
+            </div>
+          </div>
+
+
+          <div class="sc-i">
+            <div class="v">
+              ${avgT.toFixed(2)}
+              <span class="m">/1</span>
+            </div>
+
+            <div class="l">
+              Tracking
+            </div>
+
+            <div class="bg">
+              <div
+                class="fl tr"
+                style="width:${avgT * 100}%"
+              ></div>
+            </div>
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* ================= BUTTONS ================= */
+
+    const buttonHTML = `
+
+      <div
+        class="bts"
+        onclick="event.stopPropagation();"
+      >
+
+        ${card.types.map(
+          (type, index) => {
+
+            let icon =
+              "circle";
+
+            if (type === "bar") {
+              icon = "chart-bar";
+            }
+
+            if (type === "pie") {
+              icon = "chart-pie";
+            }
+
+            if (type === "line") {
+              icon = "chart-line";
+            }
+
+            if (type === "radar") {
+              icon = "chart-pie";
+            }
+
+            return `
+
+              <button
+                class="bt ${index === 0 ? "on" : ""}"
+                onclick="switchType(
+                  '${card.id}',
+                  '${type}',
+                  event
+                )"
+                title="${type}"
+              >
+                <i class="fas fa-${icon}"></i>
+              </button>
+
+            `;
+
+          }
+        ).join("")}
+
+      </div>
+
+    `;
+
+
+    /* ================= CARD HTML ================= */
+
+    div.innerHTML = `
+
+      <div class="cd-hd">
+
+        <h3>
+          <i class="fas ${card.icon}"></i>
+          ${esc(card.ttl)}
+        </h3>
+
+        ${buttonHTML}
+
+      </div>
+
+      ${scoreHTML}
+
+      <div class="ch ${card.full ? "t" : ""}">
+        <canvas id="${card.id}Chart"></canvas>
+      </div>
+
+      <div class="hint">
+        <span id="hint-${card.id}">
+          👆 Tap to expand
+        </span>
+      </div>
+
+    `;
+
+
+    div.addEventListener(
+      "click",
+      () => openCard(card.id)
+    );
+
+
+    grid.appendChild(div);
+
+
+    const data =
+      chartData[card.id];
+
+
+    if (data) {
+
+      buildChart(
+        card.id + "Chart",
+        card.types[0],
+        data.labels,
+        data.data,
+        data.colors,
+        false
+      );
+
+    }
+
+  });
+
+
+  /* ================= RESPONSE TABLE ================= */
+
+  const tableCard =
+    document.createElement("div");
+
+  tableCard.className =
+    "cd cd-full";
+
+
+  tableCard.innerHTML = `
+
+    <div class="cd-hd">
+
+      <h3>
+        <i class="fas fa-table"></i>
+        Responses (${total})
+      </h3>
+
+    </div>
+
+
+    <div class="tw">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>#</th>
+            <th>Faculty</th>
+            <th>Year</th>
+            <th>Gender</th>
+            <th>LMS</th>
+            <th>Platform</th>
+            <th>Frequency</th>
+            <th>Useful</th>
+            <th>Ease</th>
+            <th>Reliable</th>
+            <th>Satisfaction</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${rawData.map(
+            (row, index) => {
+
+              const satisfaction =
+                normalize(
+                  row.satisfaction
+                );
+
+
+              let satClass = "b";
+
+              if (
+                satisfaction ===
+                  "very satisfied" ||
+                satisfaction ===
+                  "satisfied"
+              ) {
+                satClass = "g";
+              }
+              else if (
+                satisfaction ===
+                "neutral"
+              ) {
+                satClass = "w";
+              }
+
+
+              const lmsClass =
+                normalize(
+                  row.usesLMS
+                ) === "yes"
+                  ? "g"
+                  : "w";
+
+
+              return `
+
+                <tr>
+
+                  <td>
+                    ${index + 1}
+                  </td>
+
+                  <td>
+                    ${esc(row.faculty || "—")}
+                  </td>
+
+                  <td>
+                    ${esc(row.year || "—")}
+                  </td>
+
+                  <td>
+                    ${esc(row.gender || "—")}
+                  </td>
+
+                  <td>
+                    <span class="pill ${lmsClass}">
+                      ${esc(row.usesLMS || "—")}
+                    </span>
+                  </td>
+
+                  <td>
+                    ${esc(row.platform || "—")}
+                  </td>
+
+                  <td>
+                    ${esc(row.frequency || "—")}
+                  </td>
+
+                  <td>
+                    ${esc(row.usefulness || "—")}
+                  </td>
+
+                  <td>
+                    ${esc(row.ease || "—")}
+                  </td>
+
+                  <td>
+                    ${esc(row.reliability || "—")}
+                  </td>
+
+                  <td>
+                    <span class="pill ${satClass}">
+                      ${esc(row.satisfaction || "—")}
+                    </span>
+                  </td>
+
+                </tr>
+
+              `;
+
+            }
+          ).join("")}
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  `;
+
+
+  grid.appendChild(
+    tableCard
+  );
+
+}
+
+
+/* =========================================================
+   UPDATE STATISTICS
+========================================================= */
+
+function updateStats(
+  total,
+  avgU,
+  avgE,
+  avgR,
+  satP,
+  impP
+) {
+
+  document.getElementById(
+    "cTotal"
+  ).textContent = total;
+
+
+  document.getElementById(
+    "ftTotal"
+  ).textContent = total;
+
+
+  document.getElementById(
+    "cUse"
+  ).textContent =
+    avgU.toFixed(2);
+
+
+  document.getElementById(
+    "cEase"
+  ).textContent =
+    avgE.toFixed(2);
+
+
+  document.getElementById(
+    "cRel"
+  ).textContent =
+    avgR.toFixed(2);
+
+
+  document.getElementById(
+    "cSat"
+  ).innerHTML =
+    satP.toFixed(2) +
+    '<span class="s">%</span>';
+
+
+  document.getElementById(
+    "cImp"
+  ).innerHTML =
+    impP.toFixed(2) +
+    '<span class="s">%</span>';
+
+
+  document.getElementById(
+    "cBU"
+  ).style.width =
+    Math.min(
+      avgU / 5 * 100,
+      100
+    ) + "%";
+
+
+  document.getElementById(
+    "cBE"
+  ).style.width =
+    Math.min(
+      avgE / 5 * 100,
+      100
+    ) + "%";
+
+
+  document.getElementById(
+    "cBR"
+  ).style.width =
+    Math.min(
+      avgR / 5 * 100,
+      100
+    ) + "%";
+
+
+  document.getElementById(
+    "cBS"
+  ).style.width =
+    Math.min(
+      satP,
+      100
+    ) + "%";
+
+
+  document.getElementById(
+    "cBI"
+  ).style.width =
+    Math.min(
+      impP,
+      100
+    ) + "%";
+
+}
+
+
+/* =========================================================
+   SWITCH CHART TYPE
+========================================================= */
+
+function switchType(
+  id,
+  type,
+  event
+) {
+
+  event.stopPropagation();
+
+
+  const data =
+    chartData[id];
+
+
+  if (!data) {
+    return;
+  }
+
+
+  buildChart(
+    id + "Chart",
+    type,
+    data.labels,
+    data.data,
+    data.colors,
+    showNums[id] || false
+  );
+
+
+  const card =
+    document.querySelector(
+      '[data-chart="' +
+      id +
+      '"]'
+    );
+
+
+  if (card) {
+
+    card
+      .querySelectorAll(".bt")
+      .forEach(button => {
+        button.classList.remove("on");
+      });
+
+
+    const clicked =
+      event.target.closest(
+        ".bt"
+      );
+
+
+    if (clicked) {
+      clicked.classList.add("on");
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   OPEN CHART MODAL
+========================================================= */
+
+function openCard(id) {
+
+  const data =
+    chartData[id];
+
+
+  if (!data) {
+    return;
+  }
+
+
+  currentMd =
+    id;
+
+
+  const card =
+    document.querySelector(
+      '[data-chart="' +
+      id +
+      '"]'
+    );
+
+
+  const title =
+    card
+      ? card.querySelector("h3")
+      : null;
+
+
+  document.getElementById(
+    "mdTtl"
+  ).textContent =
+    title
+      ? title.textContent
+      : id;
+
+
+  document.getElementById(
+    "md"
+  ).classList.add("on");
+
+
+  if (mdChart) {
+
+    try {
+      mdChart.destroy();
+    } catch (_) {}
+
+    mdChart = null;
+
+  }
+
+
+  mdChart =
+    buildChart(
+      "mdC",
+      "doughnut",
+      data.labels,
+      data.data,
+      data.colors,
+      true
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeMd() {
+
+  if (currentMd) {
+
+    const data =
+      chartData[currentMd];
+
+
+    if (data) {
+
+      const activeType =
+        getActiveType(
+          currentMd
+        );
+
+
+      buildChart(
+        currentMd + "Chart",
+        activeType,
+        data.labels,
+        data.data,
+        data.colors,
+        false
+      );
+
+    }
+
+
+    const hint =
+      document.getElementById(
+        "hint-" +
+        currentMd
+      );
+
+
+    if (hint) {
+      hint.textContent =
+        "👆 Tap to expand";
+    }
+
+  }
+
+
+  document.getElementById(
+    "md"
+  ).classList.remove("on");
+
+
+  if (mdChart) {
+
+    try {
+      mdChart.destroy();
+    } catch (_) {}
+
+    mdChart = null;
+
+  }
+
+
+  currentMd = "";
+
+}
+
+
+/* =========================================================
+   GET ACTIVE CHART TYPE
+========================================================= */
+
+function getActiveType(id) {
+
+  const card =
+    document.querySelector(
+      '[data-chart="' +
+      id +
+      '"]'
+    );
+
+
+  if (card) {
+
+    const active =
+      card.querySelector(
+        ".bt.on"
+      );
+
+
+    if (active) {
+
+      const buttons =
+        Array.from(
+          card.querySelectorAll(
+            ".bt"
+          )
+        );
+
+
+      const index =
+        buttons.indexOf(
+          active
+        );
+
+
+      const types =
+        chartData[id]
+          ? null
+          : null;
+
+
+      const onclick =
+        active.getAttribute(
+          "onclick"
+        ) || "";
+
+
+      if (
+        onclick.includes(
+          "'pie'"
+        )
+      ) {
+        return "pie";
+      }
+
+
+      if (
+        onclick.includes(
+          "'doughnut'"
+        )
+      ) {
+        return "doughnut";
+      }
+
+
+      if (
+        onclick.includes(
+          "'bar'"
+        )
+      ) {
+        return "bar";
+      }
+
+
+      if (
+        onclick.includes(
+          "'line'"
+        )
+      ) {
+        return "line";
+      }
+
+
+      if (
+        onclick.includes(
+          "'radar'"
+        )
+      ) {
+        return "radar";
+      }
+
+    }
+
+  }
+
+
+  return "doughnut";
+
+}
+
+
+/* =========================================================
+   MODAL CHART TYPE
+========================================================= */
+
+function mdType(type) {
+
+  const data =
+    chartData[currentMd];
+
+
+  if (!data) {
+    return;
+  }
+
+
+  if (mdChart) {
+
+    try {
+      mdChart.destroy();
+    } catch (_) {}
+
+  }
+
+
+  mdChart =
+    buildChart(
+      "mdC",
+      type,
+      data.labels,
+      data.data,
+      data.colors,
+      true
+    );
+
+}
+
+
+/* =========================================================
+   DOWNLOAD CHART
+========================================================= */
+
+function mdDL() {
+
+  const canvas =
+    document.getElementById(
+      "mdC"
+    );
+
+
+  if (!canvas) {
+    return;
+  }
+
+
+  try {
+
+    const link =
+      document.createElement(
+        "a"
+      );
+
+
+    link.download =
+      "LMS_" +
+      (
+        currentMd ||
+        "chart"
+      ) +
+      ".png";
+
+
+    link.href =
+      canvas.toDataURL(
+        "image/png"
+      );
+
+
+    link.click();
+
+  } catch (error) {
+
+    console.error(
+      "Download error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key ===
+      "Escape"
+    ) {
+      closeMd();
+    }
+
+  }
+);
+
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+async function load() {
+
+  const grid =
+    document.getElementById(
+      "grid"
+    );
+
+
+  try {
+
+    grid.innerHTML = `
+
+      <div class="loading">
+
+        <i class="fas fa-spinner fa-spin"></i>
+
+        Loading responses…
+
+      </div>
+
+    `;
+
+
+    const response =
+      await fetch(
+        API_URL,
+        {
+          method: "GET",
+          cache: "no-store"
+        }
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Server returned HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const text =
+      await response.text();
+
+
+    if (!text.trim()) {
+
+      throw new Error(
+        "The API returned an empty response."
+      );
+
+    }
+
+
+    let data;
+
+
+    try {
+
+      data =
+        JSON.parse(text);
+
+    } catch (jsonError) {
+
+      console.error(
+        "Invalid JSON:",
+        text
+      );
+
+
+      throw new Error(
+        "Google Apps Script did not return valid JSON."
+      );
+
+    }
+
+
+    if (!Array.isArray(data)) {
+
+      if (
+        data &&
+        Array.isArray(data.data)
+      ) {
+
+        data =
+          data.data;
+
+      }
+      else {
+
+        throw new Error(
+          "API response is not an array."
+        );
+
+      }
+
+    }
+
+
+    /*
+      Convert every Google Sheet row
+      into the standard dashboard format.
+    */
+
+    rawData =
+      data
+        .map(normalizeRow)
+        .filter(row => {
+
+          return Object.values(row)
+            .some(Boolean);
+
+        });
+
+
+    console.log(
+      "Loaded responses:",
+      rawData.length
+    );
+
+
+    console.log(
+      "Normalized data:",
+      rawData
+    );
+
+
+    render();
+
+
+  } catch (error) {
+
+    console.error(
+      "Dashboard loading error:",
+      error
+    );
+
+
+    grid.innerHTML = `
+
+      <div class="err">
+
+        <i class="fas fa-exclamation-triangle"></i>
+
+        <strong>
+          Could not load survey data
+        </strong>
+
+        <br><br>
+
+        <small>
+          ${esc(error.message)}
+        </small>
+
+        <br><br>
+
+        <small>
+          Check that your Google Apps Script
+          is deployed as a Web App and is
+          accessible to everyone.
+        </small>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
+   START DASHBOARD
+========================================================= */
 
 load();
-setInterval(load,60000);
+
+
+/*
+ Refresh every 60 seconds.
+*/
+
+setInterval(
+  load,
+  60000
+);
+
 </script>
+
 </body>
 </html>
