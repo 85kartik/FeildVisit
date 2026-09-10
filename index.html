@@ -2,696 +2,368 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-<meta name="theme-color" content="#1a1a2e">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LMS Perception Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#f0f2f8;--card-bg:rgba(255,255,255,.92);--text-primary:#1a1a2e;--text-secondary:#4a4a6a;--text-muted:#8a8aaa;--border:rgba(0,0,0,.06);--shadow:0 4px 16px rgba(0,0,0,.06);--header-bg:linear-gradient(135deg,#0f0c29,#302b63,#24243e);--accent:#6366f1;--accent-light:#818cf8;--accent-dark:#4f46e5;--radius:16px;--radius-sm:10px}
-[data-theme="dark"]{--bg:#0f0f1a;--card-bg:rgba(30,30,60,.95);--text-primary:#e8e8f0;--text-secondary:#a0a0c0;--text-muted:#6a6a8a;--border:rgba(255,255,255,.06);--shadow:0 4px 16px rgba(0,0,0,.4)}
-body{font-family:'Inter',sans-serif;background:var(--bg);padding:12px;color:var(--text-primary);min-height:100vh;-webkit-font-smoothing:antialiased}
-.dashboard-container{max-width:1440px;margin:0 auto}
-.header{background:var(--header-bg);border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;box-shadow:0 6px 24px rgba(26,26,46,.2);position:relative;overflow:hidden}
-.header::before{content:'';position:absolute;top:-50%;right:-20%;width:60%;height:200%;background:radial-gradient(ellipse,rgba(99,102,241,.08),transparent 70%);pointer-events:none}
-.header-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;position:relative;z-index:1}
-.header-title h1{font-size:20px;font-weight:800;color:#fff}
-.header-title h1 i{color:#818cf8;margin-right:8px}
-.header-title .badge-pro{font-size:10px;font-weight:600;color:rgba(255,255,255,.4);background:rgba(255,255,255,.06);padding:2px 10px;border-radius:16px;margin-left:6px}
-.header-title p{color:rgba(255,255,255,.5);font-size:11px;margin-top:2px}
-.header-actions{display:flex;gap:6px;flex-wrap:wrap}
-.header-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.06);color:rgba(255,255,255,.85);padding:6px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:11px;display:flex;align-items:center;gap:4px;font-family:inherit}
-.header-btn:active{transform:scale(.95)}
-.header-btn.primary{background:var(--accent);border-color:var(--accent)}
-.header-btn.google-link i{color:#4285f4;font-size:14px}
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px;position:relative;z-index:1}
-.stat-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.04);border-radius:var(--radius-sm);padding:8px 6px;text-align:center}
-.stat-card .number{font-size:18px;font-weight:800;color:#fff;line-height:1.2}
-.stat-card .number .suffix{font-size:12px;font-weight:600;color:#818cf8}
-.stat-card .label{font-size:8px;font-weight:600;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.4px;margin-top:1px}
-.stat-card .mini-bar{width:100%;height:2px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:4px;overflow:hidden}
-.stat-card .mini-bar .fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#818cf8,#6366f1);transition:width 1s ease}
-.form-banner{background:linear-gradient(135deg,rgba(66,133,244,.06),rgba(99,102,241,.06));border:1px solid rgba(66,133,244,.1);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:16px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
-.form-banner::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#4285f4,#6366f1);border-radius:3px}
-.form-banner .form-text{display:flex;align-items:center;gap:10px;color:var(--text-secondary);font-size:12px}
-.form-banner .form-text .logo-wrapper{display:flex;align-items:center;gap:6px}
-.form-banner .form-text .logo-wrapper .form-icon{width:28px;height:28px;background:linear-gradient(135deg,#4285f4,#6366f1);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;flex-shrink:0}
-.form-banner .form-text .logo-wrapper .form-label{font-weight:700;font-size:12px;color:var(--text-primary)}
-.form-banner .form-btn{background:linear-gradient(135deg,#4285f4,#6366f1);color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:600;font-size:12px;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;width:100%}
-.section-toolbar{display:flex;flex-direction:column;gap:8px;margin:0 0 12px}
-.section-title{font-size:14px;font-weight:800;display:flex;align-items:center;gap:6px}
-.section-title i{color:var(--accent)}
-.toolbar-actions{display:flex;gap:6px;flex-wrap:wrap}
-.small-btn{background:var(--card-bg);border:1px solid var(--border);color:var(--text-secondary);padding:4px 12px;border-radius:8px;font:600 11px inherit;cursor:pointer;display:flex;align-items:center;gap:4px}
-.insight-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
-.insight-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;box-shadow:var(--shadow)}
-.insight-card .eyebrow{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted)}
-.insight-card .headline{font-size:18px;font-weight:800;margin:2px 0 0}
-.insight-card .detail{font-size:10px;line-height:1.4;color:var(--text-secondary)}
-.insight-card.good .headline{color:#059669}.insight-card.warn .headline{color:#d97706}.insight-card.risk .headline{color:#dc2626}.insight-card.info .headline{color:var(--accent)}
-.card-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px}
-.card{background:var(--card-bg);border-radius:var(--radius);padding:14px 14px 16px;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;overflow:hidden;cursor:pointer}
-.card:active{transform:scale(.99)}
-.card-full{grid-column:1}
-.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;pointer-events:none}
-.card-header .left{display:flex;align-items:center;gap:6px}
-.card-header h3{font-size:13px;font-weight:700}
-.card-header h3 i{color:var(--accent);margin-right:6px;font-size:13px}
-.card-header .actions{display:flex;gap:4px;flex-wrap:wrap;pointer-events:auto}
-.card-header .action-btn{background:var(--bg);border:1px solid var(--border);color:var(--text-secondary);padding:3px 8px;border-radius:6px;cursor:pointer;font-size:9px;font-weight:600;font-family:inherit;display:flex;align-items:center;gap:3px}
-.card-header .action-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.card-header .action-btn.expand-btn{background:rgba(99,102,241,.08);color:var(--accent);border-color:rgba(99,102,241,.15)}
-.chart-container{position:relative;height:200px;pointer-events:none}
-.chart-container.tall{height:240px}
-.chart-hint{text-align:center;font-size:9px;color:var(--text-muted);margin-top:4px;pointer-events:none}
-.chart-hint .click-text{display:inline-block;background:rgba(99,102,241,.06);padding:2px 10px;border-radius:10px;color:var(--accent);font-weight:600;font-size:9px}
-.chart-hint .click-text.visible{background:rgba(34,197,94,.1);color:#059669}
-.scores-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:12px}
-.score-item{background:var(--bg);padding:6px 8px;border-radius:var(--radius-sm);text-align:center;border:1px solid var(--border)}
-.score-item .value{font-size:15px;font-weight:800}
-.score-item .value .max{font-size:10px;font-weight:400;color:var(--text-muted)}
-.score-item .label{font-size:7px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;margin-top:1px}
-.score-item .bar-bg{width:100%;height:2px;background:#e8ecf4;border-radius:2px;margin-top:3px;overflow:hidden}
-.score-item .bar-fill{height:100%;border-radius:2px;transition:width 1s ease}
-.bar-fill.usefulness{background:linear-gradient(90deg,#4f46e5,#818cf8)}.bar-fill.ease{background:linear-gradient(90deg,#059669,#34d399)}.bar-fill.reliability{background:linear-gradient(90deg,#d97706,#fbbf24)}.bar-fill.convenience{background:linear-gradient(90deg,#db2777,#f472b6)}.bar-fill.communication{background:linear-gradient(90deg,#7c3aed,#a78bfa)}.bar-fill.tracking{background:linear-gradient(90deg,#0d9488,#2dd4bf)}
-.suggestions-container{max-height:300px;overflow-y:auto;padding-right:2px}
-.suggestion-item{background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:4px;border-left:2px solid var(--accent);font-size:12px;line-height:1.4}
-.suggestion-item .quote-icon{color:var(--accent);margin-right:4px;opacity:.5}
-.data-table-wrap{max-height:300px;overflow:auto;border:1px solid var(--border);border-radius:var(--radius-sm)}
-.data-table{width:100%;border-collapse:collapse;font-size:10px;min-width:600px}
-.data-table th{position:sticky;top:0;background:var(--bg);color:var(--text-secondary);text-align:left;padding:6px 8px;border-bottom:2px solid var(--border);font-size:8px;text-transform:uppercase;font-weight:700;z-index:1}
-.data-table td{padding:5px 8px;border-bottom:1px solid var(--border);font-size:10px}
-.status-pill{display:inline-flex;padding:1px 8px;border-radius:999px;font-size:8px;font-weight:700}
-.status-pill.good{background:rgba(34,197,94,.12);color:#15803d}.status-pill.warn{background:rgba(245,158,11,.14);color:#b45309}.status-pill.bad{background:rgba(239,68,68,.12);color:#b91c1c}
-.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:9999;display:none;justify-content:center;align-items:center;padding:12px}
-.modal-overlay.active{display:flex}
-.modal-content{background:var(--card-bg);border-radius:20px;padding:20px 16px;width:100%;max-width:100%;max-height:95vh;box-shadow:0 20px 60px rgba(0,0,0,.5);border:1px solid var(--border);position:relative;overflow:hidden}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.modal-header h2{font-size:16px;font-weight:700}
-.close-btn{background:var(--bg);border:1px solid var(--border);color:var(--text-secondary);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
-.close-btn:active{background:#ef4444;color:#fff;border-color:#ef4444}
-.modal-content .chart-container{height:280px}
-.modal-chart-actions{display:flex;gap:4px;margin-top:12px;flex-wrap:wrap;justify-content:center}
-.modal-chart-actions button{background:var(--bg);border:1px solid var(--border);padding:4px 12px;border-radius:6px;cursor:pointer;font-size:10px;font-weight:600;color:var(--text-secondary);font-family:inherit}
-.modal-chart-actions button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.modal-chart-actions .download-btn{background:var(--accent);color:#fff;border-color:var(--accent)}
-.toast{position:fixed;bottom:16px;left:16px;right:16px;background:var(--card-bg);border:1px solid var(--border);padding:12px 16px;border-radius:var(--radius-sm);box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:99999;transform:translateY(80px);opacity:0;transition:all .4s ease;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px}
-.toast.show{transform:translateY(0);opacity:1}
-.toast i{color:#22c55e;font-size:16px;flex-shrink:0}
-.footer{text-align:center;padding:16px 12px;color:var(--text-muted);font-size:10px;border-top:1px solid var(--border);margin-top:4px}
-.footer span{margin:0 6px}
-.footer i{color:var(--accent);margin:0 3px}
-.footer a{color:var(--accent);text-decoration:none}
-@media(min-width:480px){.stats-grid{grid-template-columns:repeat(3,1fr);gap:8px}.stat-card .number{font-size:20px}.card-grid{grid-template-columns:1fr 1fr}.card-full{grid-column:1/-1}.scores-summary{grid-template-columns:repeat(3,1fr)}.insight-grid{grid-template-columns:repeat(2,1fr)}.modal-content .chart-container{height:320px}}
-@media(min-width:600px){.form-banner{flex-direction:row;align-items:center}.form-banner .form-btn{width:auto}.section-toolbar{flex-direction:row;justify-content:space-between;align-items:center}}
-@media(min-width:768px){body{padding:20px}.header{padding:24px 28px}.header-title h1{font-size:24px}.stats-grid{grid-template-columns:repeat(6,1fr)}.stat-card .number{font-size:24px}.stat-card .label{font-size:10px}.card-grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}.card-full{grid-column:1/-1}.scores-summary{grid-template-columns:repeat(6,1fr)}.insight-grid{grid-template-columns:repeat(4,1fr)}.modal-content .chart-container{height:380px}.modal-content{max-width:800px;padding:28px 32px 32px}}
-@media(min-width:1024px){.card-grid{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}.modal-content .chart-container{height:420px}}
-@media print{body{background:#fff}.header{box-shadow:none}.toolbar-actions,.card-header .actions,.modal-overlay,.toast,.header-actions,.form-banner{display:none!important}.card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}.data-table-wrap{max-height:none;overflow:visible}}
+body{font-family:'Inter',sans-serif;background:#f0f2f8;padding:12px;color:#1a1a2e}
+.wrap{max-width:1440px;margin:0 auto}
+.hd{background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);border-radius:16px;padding:20px 18px;margin-bottom:16px}
+.hd-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.hd h1{font-size:20px;font-weight:800;color:#fff}
+.hd h1 i{color:#818cf8;margin-right:8px}
+.hd p{color:rgba(255,255,255,.5);font-size:11px;margin-top:2px}
+.hd-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.85);padding:6px 12px;border-radius:10px;cursor:pointer;font-size:11px;display:inline-flex;align-items:center;gap:4px;text-decoration:none}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px}
+.st{background:rgba(255,255,255,.06);border-radius:10px;padding:8px 6px;text-align:center}
+.st .n{font-size:18px;font-weight:800;color:#fff}
+.st .n .s{font-size:12px;color:#818cf8}
+.st .l{font-size:8px;font-weight:600;color:rgba(255,255,255,.45);text-transform:uppercase;margin-top:1px}
+.st .mb{width:100%;height:2px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:4px;overflow:hidden}
+.st .mb .f{height:100%;border-radius:2px;background:linear-gradient(90deg,#818cf8,#6366f1)}
+.secttl{font-size:14px;font-weight:800;display:flex;align-items:center;gap:6px;margin-bottom:12px}
+.secttl i{color:#6366f1}
+.insights{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
+.ic{background:#fff;border-radius:10px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.ic .ey{font-size:8px;font-weight:800;text-transform:uppercase;color:#8a8aaa}
+.ic .hn{font-size:18px;font-weight:800;margin:2px 0 0}
+.ic .dt{font-size:10px;color:#4a4a6a}
+.ic.g .hn{color:#059669}.ic.w .hn{color:#d97706}.ic.r .hn{color:#dc2626}.ic.i .hn{color:#6366f1}
+.grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px}
+.cd{background:#fff;border-radius:16px;padding:14px;box-shadow:0 4px 16px rgba(0,0,0,.06);cursor:pointer}
+.cd-full{grid-column:1}
+.cd-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;pointer-events:none}
+.cd-hd h3{font-size:13px;font-weight:700}
+.cd-hd h3 i{color:#6366f1;margin-right:6px}
+.cd-hd .bts{display:flex;gap:4px;pointer-events:auto}
+.cd-hd .bt{background:#f0f2f8;border:1px solid #e6e8f0;color:#4a4a6a;padding:3px 8px;border-radius:6px;cursor:pointer;font-size:9px;font-weight:600}
+.cd-hd .bt.on{background:#6366f1;color:#fff;border-color:#6366f1}
+.ch{position:relative;height:200px;pointer-events:none}
+.ch.t{height:240px}
+.hint{text-align:center;font-size:9px;color:#8a8aaa;margin-top:4px;pointer-events:none}
+.hint span{background:rgba(99,102,241,.06);padding:2px 10px;border-radius:10px;color:#6366f1;font-weight:600;font-size:9px;display:inline-block}
+.sc{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:12px}
+.sc-i{background:#f0f2f8;padding:6px 8px;border-radius:10px;text-align:center;border:1px solid #e6e8f0}
+.sc-i .v{font-size:15px;font-weight:800}
+.sc-i .v .m{font-size:10px;color:#8a8aaa;font-weight:400}
+.sc-i .l{font-size:7px;font-weight:700;color:#4a4a6a;text-transform:uppercase;margin-top:1px}
+.sc-i .bg{width:100%;height:2px;background:#e8ecf4;border-radius:2px;margin-top:3px;overflow:hidden}
+.sc-i .fl{height:100%;border-radius:2px}
+.sc-i .fl.us{background:linear-gradient(90deg,#4f46e5,#818cf8)}
+.sc-i .fl.ea{background:linear-gradient(90deg,#059669,#34d399)}
+.sc-i .fl.re{background:linear-gradient(90deg,#d97706,#fbbf24)}
+.sc-i .fl.co{background:linear-gradient(90deg,#db2777,#f472b6)}
+.sc-i .fl.cm{background:linear-gradient(90deg,#7c3aed,#a78bfa)}
+.sc-i .fl.tr{background:linear-gradient(90deg,#0d9488,#2dd4bf)}
+.sug{max-height:300px;overflow-y:auto;padding-right:2px}
+.sg{background:#f0f2f8;border-radius:10px;padding:10px 12px;margin-bottom:4px;border-left:2px solid #6366f1;font-size:12px;line-height:1.4}
+.sg i{color:#6366f1;margin-right:4px;opacity:.5}
+.tw{max-height:300px;overflow:auto;border:1px solid #e6e8f0;border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:10px;min-width:600px}
+table th{position:sticky;top:0;background:#f0f2f8;color:#4a4a6a;text-align:left;padding:6px 8px;border-bottom:2px solid #e6e8f0;font-size:8px;text-transform:uppercase;font-weight:700}
+table td{padding:5px 8px;border-bottom:1px solid #e6e8f0;font-size:10px}
+.pill{display:inline-flex;padding:1px 8px;border-radius:999px;font-size:8px;font-weight:700}
+.pill.g{background:rgba(34,197,94,.12);color:#15803d}
+.pill.w{background:rgba(245,158,11,.14);color:#b45309}
+.pill.b{background:rgba(239,68,68,.12);color:#b91c1c}
+.md{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:9999;display:none;justify-content:center;align-items:center;padding:12px}
+.md.on{display:flex}
+.md-c{background:#fff;border-radius:20px;padding:20px 16px;width:100%;max-width:800px;max-height:95vh;overflow:hidden}
+.md-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.md-h h2{font-size:16px;font-weight:700}
+.md-h .cl{background:#f0f2f8;border:1px solid #e6e8f0;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.md .ch{height:300px}
+.md-acts{display:flex;gap:4px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+.md-acts button{background:#f0f2f8;border:1px solid #e6e8f0;padding:4px 12px;border-radius:6px;cursor:pointer;font-size:10px;font-weight:600;color:#4a4a6a}
+.md-acts button.on{background:#6366f1;color:#fff;border-color:#6366f1}
+.md-acts .dl{background:#6366f1;color:#fff;border-color:#6366f1}
+.loading{text-align:center;padding:40px;font-size:16px;font-weight:600;color:#6366f1}
+.loading i{font-size:32px;display:block;margin-bottom:12px}
+.err{text-align:center;padding:40px;color:#dc2626;font-size:14px}
+.ft{text-align:center;padding:16px;color:#8a8aaa;font-size:10px;border-top:1px solid #e6e8f0}
+@media(min-width:480px){.stats{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr 1fr}.cd-full{grid-column:1/-1}.insights{grid-template-columns:repeat(4,1fr)}.sc{grid-template-columns:repeat(6,1fr)}}
+@media(min-width:768px){body{padding:20px}.stats{grid-template-columns:repeat(6,1fr)}.st .n{font-size:24px}.grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}}
 </style>
 </head>
 <body>
-<div class="dashboard-container">
+<div class="wrap">
 
-<header class="header">
-<div class="header-top">
-<div class="header-title">
-<h1><i class="fas fa-graduation-cap"></i>LMS <span class="badge-pro">Pro</span></h1>
-<p>Student perceptions of Learning Management Systems</p>
-</div>
-<div class="header-actions">
-<button class="header-btn" id="themeToggle"><i class="fas fa-moon"></i></button>
-<button class="header-btn google-link" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSecj7leJ0LTbSFk9frW2UzJgdUoK2bAuAdpZKc_VmjO70PmuQ/viewform?usp=dialog','_blank')"><i class="fab fa-google"></i></button>
-<button class="header-btn primary" id="exportData"><i class="fas fa-download"></i></button>
-<button class="header-btn" id="refreshBtn"><i class="fas fa-sync-alt"></i></button>
-</div>
-</div>
-<div class="stats-grid">
-<div class="stat-card"><div class="number" id="totalResponses">0</div><div class="label">Total</div></div>
-<div class="stat-card"><div class="number" id="avgUsefulness">0.00</div><div class="label">Usefulness</div><div class="mini-bar"><div class="fill" id="barUsefulnessHeader" style="width:0%"></div></div></div>
-<div class="stat-card"><div class="number" id="avgEase">0.00</div><div class="label">Ease</div><div class="mini-bar"><div class="fill" id="barEaseHeader" style="width:0%"></div></div></div>
-<div class="stat-card"><div class="number" id="avgReliability">0.00</div><div class="label">Reliability</div><div class="mini-bar"><div class="fill" id="barReliabilityHeader" style="width:0%"></div></div></div>
-<div class="stat-card"><div class="number" id="satisfactionRate">0<span class="suffix">%</span></div><div class="label">Satisfaction</div><div class="mini-bar"><div class="fill" id="barSatisfactionHeader" style="width:0%"></div></div></div>
-<div class="stat-card"><div class="number" id="improveRate">0<span class="suffix">%</span></div><div class="label">Improvement</div><div class="mini-bar"><div class="fill" id="barImproveHeader" style="width:0%"></div></div></div>
-</div>
-</header>
-
-<div class="form-banner">
-<div class="form-text">
-<div class="logo-wrapper">
-<div class="form-icon"><i class="fab fa-google"></i></div>
-<div class="form-label">Forms</div>
-</div>
-<span>📋 Share your feedback!</span>
-</div>
-<button class="form-btn" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSecj7leJ0LTbSFk9frW2UzJgdUoK2bAuAdpZKc_VmjO70PmuQ/viewform?usp=dialog','_blank')">
-<i class="fas fa-external-link-alt"></i> Open Form
-</button>
+<div class="hd">
+  <div class="hd-top">
+    <div>
+      <h1><i class="fas fa-graduation-cap"></i>LMS Perception Dashboard</h1>
+      <p>Live data synced from Google Sheets</p>
+    </div>
+    <a class="hd-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSecj7leJ0LTbSFk9frW2UzJgdUoK2bAuAdpZKc_VmjO70PmuQ/viewform?usp=dialog" target="_blank">
+      <i class="fab fa-google"></i> Open Form
+    </a>
+  </div>
+  <div class="stats">
+    <div class="st"><div class="n" id="cTotal">0</div><div class="l">Total</div></div>
+    <div class="st"><div class="n" id="cUse">0.00</div><div class="l">Usefulness</div><div class="mb"><div class="f" id="cBU" style="width:0%"></div></div></div>
+    <div class="st"><div class="n" id="cEase">0.00</div><div class="l">Ease</div><div class="mb"><div class="f" id="cBE" style="width:0%"></div></div></div>
+    <div class="st"><div class="n" id="cRel">0.00</div><div class="l">Reliability</div><div class="mb"><div class="f" id="cBR" style="width:0%"></div></div></div>
+    <div class="st"><div class="n" id="cSat">0<span class="s">%</span></div><div class="l">Satisfaction</div><div class="mb"><div class="f" id="cBS" style="width:0%"></div></div></div>
+    <div class="st"><div class="n" id="cImp">0<span class="s">%</span></div><div class="l">Improvement</div><div class="mb"><div class="f" id="cBI" style="width:0%"></div></div></div>
+  </div>
 </div>
 
-<div class="section-toolbar">
-<div class="section-title"><i class="fas fa-chart-line"></i> Summary</div>
-<div class="toolbar-actions">
-<button class="small-btn" id="printReport"><i class="fas fa-print"></i> PDF</button>
-<button class="small-btn" id="exportCsv"><i class="fas fa-file-csv"></i> CSV</button>
-</div>
-</div>
-
-<div class="insight-grid">
-<div class="insight-card good"><div class="eyebrow">Sentiment</div><div class="headline" id="insightSatisfaction">—</div><div class="detail" id="insightSatisfactionDetail">Loading…</div></div>
-<div class="insight-card info"><div class="eyebrow">Strongest</div><div class="headline" id="insightStrongest">—</div><div class="detail" id="insightStrongestDetail">—</div></div>
-<div class="insight-card risk"><div class="eyebrow">Priority Issue</div><div class="headline" id="insightRisk">—</div><div class="detail" id="insightRiskDetail">—</div></div>
-<div class="insight-card warn"><div class="eyebrow">LMS Adoption</div><div class="headline" id="insightAdoption">—</div><div class="detail" id="insightAdoptionDetail">—</div></div>
+<div class="secttl"><i class="fas fa-chart-line"></i> Summary</div>
+<div class="insights">
+  <div class="ic g"><div class="ey">Sentiment</div><div class="hn" id="iSat">—</div><div class="dt" id="iSatD">Loading…</div></div>
+  <div class="ic i"><div class="ey">Strongest</div><div class="hn" id="iStr">—</div><div class="dt" id="iStrD">—</div></div>
+  <div class="ic r"><div class="ey">Priority Issue</div><div class="hn" id="iRisk">—</div><div class="dt" id="iRiskD">—</div></div>
+  <div class="ic w"><div class="ey">LMS Adoption</div><div class="hn" id="iAdopt">—</div><div class="dt" id="iAdoptD">—</div></div>
 </div>
 
-<div class="card-grid">
-
-<div class="card" data-chart="gender" onclick="handleCardClick('gender')">
-<div class="card-header">
-<div class="left"><h3><i class="fas fa-venus-mars"></i> Gender</h3></div>
-<div class="actions" onclick="event.stopPropagation();">
-<button class="action-btn active" onclick="switchChart('gender','doughnut');event.stopPropagation();"><i class="fas fa-circle"></i></button>
-<button class="action-btn" onclick="switchChart('gender','pie');event.stopPropagation();"><i class="fas fa-chart-pie"></i></button>
-<button class="action-btn" onclick="switchChart('gender','bar');event.stopPropagation();"><i class="fas fa-chart-bar"></i></button>
-<button class="action-btn expand-btn" onclick="openModal('gender');event.stopPropagation();"><i class="fas fa-expand"></i></button>
-</div>
-</div>
-<div class="chart-container"><canvas id="genderChart"></canvas></div>
-<div class="chart-hint"><span class="click-text" id="hint-gender">👆 Tap to expand</span></div>
+<div class="grid" id="grid">
+  <div class="loading"><i class="fas fa-spinner fa-spin"></i>Loading responses…</div>
 </div>
 
-<div class="card" data-chart="year" onclick="handleCardClick('year')">
-<div class="card-header">
-<div class="left"><h3><i class="fas fa-users"></i> Academic Year</h3></div>
-<div class="actions" onclick="event.stopPropagation();">
-<button class="action-btn active" onclick="switchChart('year','doughnut');event.stopPropagation();"><i class="fas fa-circle"></i></button>
-<button class="action-btn" onclick="switchChart('year','pie');event.stopPropagation();"><i class="fas fa-chart-pie"></i></button>
-<button class="action-btn" onclick="switchChart('year','bar');event.stopPropagation();"><i class="fas fa-chart-bar"></i></button>
-<button class="action-btn expand-btn" onclick="openModal('year');event.stopPropagation();"><i class="fas fa-expand"></i></button>
-</div>
-</div>
-<div class="chart-container"><canvas id="yearChart"></canvas></div>
-<div class="chart-hint"><span class="click-text" id="hint-year">👆 Tap to expand</span></div>
-</div>
-
-<div class="card" data-chart="faculty" onclick="handleCardClick('faculty')">
-<div class="card-header">
-<div class="left"><h3><i class="fas fa-building-columns"></i> Faculty</h3></div>
-<div class="actions" onclick="event.stopPropagation();">
-<button class="action-btn active" onclick="switchChart('faculty','doughnut');event.stopPropagation();"><i class="fas fa-circle"></i></button>
-<button class="action-btn" onclick="switchChart('faculty','pie');event.stopPropagation();"><i class="fas fa-chart-pie"></i></button>
-<button class="action-btn" onclick="switchChart('faculty','bar');event.stopPropagation();"><i class="fas fa-chart-bar"></i></button>
-<button class="action-btn expand-btn" onclick="openModal('faculty');event.stopPropagation();"><i class="fas fa-expand"></i></button>
-</div>
-</div>
-<div class="chart-container"><canvas id="facultyChart"></canvas></div>
-<div class="chart-hint"><span class="click-text" id="hint-faculty">👆 Tap to expand</span></div>
-</div>
-
-<div class="card" data-chart="usage" onclick="handleCardClick('usage')">
-<div class="card-header">
-<div class="left"><h3><i class="fas fa-check-circle"></i> LMS Adoption</h3></div>
-<div class="actions" onclick="event.stopPropagation();">
-<button class="action-btn active" onclick="switchChart('usage','doughnut');event.stopPropagation();"><i class="fas fa-circle"></i></button>
-<button class="action-btn" onclick="switchChart('usage','pie');event.stopPropagation();"><i class="fas fa-chart-pie"></i></button>
-<button class="action-btn" onclick="switchChart('usage','bar');event.stopPropagation();"><i class="fas fa-chart-bar"></i></button>
-<button class="action-btn expand-btn" onclick="openModal('usage');event.stopPropagation();"><i class="fas fa-expand"></i></button>
-</div>
-</div>
-<div class="chart-container"><canvas id="usageChart"></canvas></div>
-<div class="chart-hint"><span class="click-text" id="hint-usage">👆 Tap to expand</span></div>
-</div>
-
-<div class="card" data-chart="platform" onclick="handleCardClick('platform')">
-<div class="card-header">
-<div class="left"><h3><i class="fas fa-laptop"></i> Platform</h3></div>
-<div class="actions" onclick="event.stopPropagation();">
-<button class="action-btn active" onclick="switchChart('platform','bar');event.stopPropagation();"><i class="fas fa-chart-bar"></i></button>
-<button class="action-btn" onclick="switchChart('platform','pie');event.stopPropagation();"><i class="fas fa-chart-pie"></i></button>
-<button class="action-btn" onclick="switchChart('platform','doughnut');event.stopPropagation();"><i class="fas fa-circle"></i></button>
-<button class="action-btn expand-btn" onclick="openModal('platform');event.stopPropagation();"><i class="fas fa-expand"></i></button>
-</div>
-</div>
-<div class="chart-container"><canvas id="platformChart"></canvas></div>
-<div class="chart-hint"><span class="click-text" id="hint-platform">👆 Tap to expand</span></div>
-</div>
-
-<div class="card" data-chart="frequency" onclick="handleCardClick('frequency')">
-<div class="card-header">
-<div class="left"><h3><i class="fas fa-clock"></i> Frequency</h3></div>
-<div class="actions" onclick="event.stopPropagation();">
-<button class="action-btn active" onclick="switchChart('frequency','bar');event.stopPropagation();"><i class="fas fa-chart-bar"></i></button>
-<button class="action-btn" onclick="switchChart('frequency','pie');event.stopPropagation();"><i class="fas fa-chart-pie"></i></button>
-<button class="action-btn" onclick="switchChart('frequency','doughnut');event.stopPropagation();"><i class="fas fa-circle"></i></button>
-<button class="action-btn expand-btn" onclick="openModal('frequency');event.stopPropagation();"><i class="fas fa-expand"></i></button>
-</div>
-</div>
-<div class="chart-container"><canvas id="frequencyChart"></canvas></div>
-<div class="chart-hint"><span class="click-text" id="hint-frequency">👆 Tap to expand</span></div>
-</div>
-
-<div class="card card-full" data-chart="perception" onclick="handleCardClick('perception')">
-<div class="card-header">
-<div class="left"><h3><i class="fas fa-star"></i> Perception Scores</h3></div>
-<div class="actions" onclick="event.stopPropagation();">
-<button class="action-btn active" onclick="switchChart('perception','bar');event.stopPropagation();"><i class="fas fa-chart-bar"></i></button>
-<button class="action-btn" onclick="switchChart('perception','line');event.stopPropagation();"><i class="fas fa-chart-line"></i></button>
-<button class="action-btn" onclick="switchChart('perception','radar');event.stopPropagation();"><i class="fas fa-chart-pie"></i></button>
-<button class="action-btn expand-btn" onclick="openModal('perception');event.stopPropagation();"><i class="fas fa-expand"></i></button>
-</div>
-</div>
-<div class="scores-summary">
-<div class="score-item"><div class="value" id="scoreUsefulness">0.00 <span class="max">/5</span></div><div class="label">Usefulness</div><div class="bar-bg"><div class="bar-fill usefulness" id="barUsefulness" style="width:0%"></div></div></div>
-<div class="score-item"><div class="value" id="scoreEase">0.00 <span class="max">/5</span></div><div class="label">Ease</div><div class="bar-bg"><div class="bar-fill ease" id="barEase" style="width:0%"></div></div></div>
-<div class="score-item"><div class="value" id="scoreReliability">0.00 <span class="max">/5</span></div><div class="label">Reliability</div><div class="bar-bg"><div class="bar-fill reliability" id="barReliability" style="width:0%"></div></div></div>
-<div class="score-item"><div class="value" id="scoreConvenience">0.00 <span class="max">/5</span></div><div class="label">Assignment</div><div class="bar-bg"><div class="bar-fill convenience" id="barConvenience" style="width:0%"></div></div></div>
-<div class="score-item"><div class="value" id="scoreCommunication">0.00 <span class="max">/1</span></div><div class="label">Teacher Comm.</div><div class="bar-bg"><div class="bar-fill communication" id="barCommunication" style="width:0%"></div></div></div>
-<div class="score-item"><div class="value" id="scoreTracking">0.00 <span class="max">/1</span></div><div class="label">Tracking</div><div class="bar-bg"><div class="bar-fill tracking" id="barTracking" style="width:0%"></div></div></div>
-</div>
-<div class="chart-container tall"><canvas id="perceptionChart"></canvas></div>
-<div class="chart-hint"><span class="click-text" id="hint-perception">👆 Tap to expand</span></div>
-</div>
-
-<div class="card card-full" data-chart="satisfaction" onclick="handleCardClick('satisfaction')">
-<div class="card-header">
-<div class="left"><h3><i class="fas fa-smile"></i> Satisfaction</h3></div>
-<div class="actions" onclick="event.stopPropagation();">
-<button class="action-btn active" onclick="switchChart('satisfaction','bar');event.stopPropagation();"><i class="fas fa-chart-bar"></i></button>
-<button class="action-btn" onclick="switchChart('satisfaction','pie');event.stopPropagation();"><i class="fas fa-chart-pie"></i></button>
-<button class="action-btn" onclick="switchChart('satisfaction','doughnut');event.stopPropagation();"><i class="fas fa-circle"></i></button>
-<button class="action-btn expand-btn" onclick="openModal('satisfaction');event.stopPropagation();"><i class="fas fa-expand"></i></button>
-</div>
-</div>
-<div class="chart-container tall"><canvas id="satisfactionChart"></canvas></div>
-<div class="chart-hint"><span class="click-text" id="hint-satisfaction">👆 Tap to expand</span></div>
-</div>
-
-<div class="card" data-chart="improve" onclick="handleCardClick('improve')">
-<div class="card-header">
-<div class="left"><h3><i class="fas fa-graduation-cap"></i> Improvement</h3></div>
-<div class="actions" onclick="event.stopPropagation();">
-<button class="action-btn active" onclick="switchChart('improve','doughnut');event.stopPropagation();"><i class="fas fa-circle"></i></button>
-<button class="action-btn" onclick="switchChart('improve','pie');event.stopPropagation();"><i class="fas fa-chart-pie"></i></button>
-<button class="action-btn" onclick="switchChart('improve','bar');event.stopPropagation();"><i class="fas fa-chart-bar"></i></button>
-<button class="action-btn expand-btn" onclick="openModal('improve');event.stopPropagation();"><i class="fas fa-expand"></i></button>
-</div>
-</div>
-<div class="chart-container"><canvas id="improveChart"></canvas></div>
-<div class="chart-hint"><span class="click-text" id="hint-improve">👆 Tap to expand</span></div>
-</div>
-
-<div class="card" data-chart="mobile" onclick="handleCardClick('mobile')">
-<div class="card-header">
-<div class="left"><h3><i class="fas fa-mobile-alt"></i> Mobile Access</h3></div>
-<div class="actions" onclick="event.stopPropagation();">
-<button class="action-btn active" onclick="switchChart('mobile','doughnut');event.stopPropagation();"><i class="fas fa-circle"></i></button>
-<button class="action-btn" onclick="switchChart('mobile','pie');event.stopPropagation();"><i class="fas fa-chart-pie"></i></button>
-<button class="action-btn" onclick="switchChart('mobile','bar');event.stopPropagation();"><i class="fas fa-chart-bar"></i></button>
-<button class="action-btn expand-btn" onclick="openModal('mobile');event.stopPropagation();"><i class="fas fa-expand"></i></button>
-</div>
-</div>
-<div class="chart-container"><canvas id="mobileChart"></canvas></div>
-<div class="chart-hint"><span class="click-text" id="hint-mobile">👆 Tap to expand</span></div>
-</div>
-
-<div class="card card-full" data-chart="problems" onclick="handleCardClick('problems')">
-<div class="card-header">
-<div class="left"><h3><i class="fas fa-exclamation-triangle"></i> Challenges</h3></div>
-<div class="actions" onclick="event.stopPropagation();">
-<button class="action-btn active" onclick="switchChart('problems','bar');event.stopPropagation();"><i class="fas fa-chart-bar"></i></button>
-<button class="action-btn" onclick="switchChart('problems','pie');event.stopPropagation();"><i class="fas fa-chart-pie"></i></button>
-<button class="action-btn" onclick="switchChart('problems','doughnut');event.stopPropagation();"><i class="fas fa-circle"></i></button>
-<button class="action-btn expand-btn" onclick="openModal('problems');event.stopPropagation();"><i class="fas fa-expand"></i></button>
-</div>
-</div>
-<div class="chart-container tall"><canvas id="problemsChart"></canvas></div>
-<div class="chart-hint"><span class="click-text" id="hint-problems">👆 Tap to expand</span></div>
-</div>
-
-<div class="card card-full">
-<div class="card-header"><div class="left"><h3><i class="fas fa-lightbulb" style="color:#f59e0b;"></i> Recommendations</h3></div><div class="actions"><span style="font-size:8px;font-weight:700;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:16px;">Feedback</span></div></div>
-<div class="suggestions-container" id="suggestionsContainer"></div>
-</div>
-
-<div class="card card-full">
-<div class="card-header"><div class="left"><h3><i class="fas fa-table"></i> Responses</h3></div><div class="actions"><span style="font-size:8px;font-weight:700;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:16px;" id="tableCountBadge">0 rows</span></div></div>
-<div class="data-table-wrap">
-<table class="data-table">
-<thead><tr><th>#</th><th>Faculty</th><th>Year</th><th>Gender</th><th>LMS</th><th>Platform</th><th>Frequency</th><th>Useful</th><th>Ease</th><th>Reliable</th><th>Satisfaction</th></tr></thead>
-<tbody id="responseTableBody"></tbody>
-</table>
-</div>
-</div>
+<div class="ft"><i class="fas fa-database"></i> LMS Survey 2026 &bull; <i class="fas fa-users"></i> <span id="ftTotal">0</span> responses</div>
 
 </div>
 
-<div class="footer">
-<i class="fas fa-database"></i> LMS Survey 2026
-<span>•</span>
-<i class="fas fa-users"></i> <span id="footerTotal">0</span>
-<span>•</span>
-<i class="fas fa-mobile-alt"></i> Mobile Optimized
-<span>•</span>
-<i class="fab fa-google"></i> <a href="https://docs.google.com/forms/d/e/1FAIpQLSecj7leJ0LTbSFk9frW2UzJgdUoK2bAuAdpZKc_VmjO70PmuQ/viewform?usp=dialog" target="_blank">Form</a>
+<div class="md" id="md" onclick="if(event.target===this)closeMd()">
+  <div class="md-c">
+    <div class="md-h"><h2 id="mdTtl">Chart</h2><button class="cl" onclick="closeMd()"><i class="fas fa-times"></i></button></div>
+    <div class="ch"><canvas id="mdC"></canvas></div>
+    <div class="md-acts">
+      <button onclick="mdType('pie')"><i class="fas fa-chart-pie"></i></button>
+      <button onclick="mdType('doughnut')"><i class="fas fa-circle"></i></button>
+      <button onclick="mdType('bar')"><i class="fas fa-chart-bar"></i></button>
+      <button onclick="mdType('line')"><i class="fas fa-chart-line"></i></button>
+      <button onclick="mdType('radar')"><i class="fas fa-chart-pie"></i></button>
+      <button class="dl" onclick="mdDL()"><i class="fas fa-image"></i></button>
+    </div>
+  </div>
 </div>
-
-</div>
-
-<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this) closeModal()">
-<div class="modal-content">
-<div class="modal-header"><h2 id="modalTitle">Chart</h2><button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
-<div class="chart-container"><canvas id="modalChart"></canvas></div>
-<div class="modal-chart-actions">
-<button onclick="switchModalChart('pie')"><i class="fas fa-chart-pie"></i></button>
-<button onclick="switchModalChart('doughnut')"><i class="fas fa-circle"></i></button>
-<button onclick="switchModalChart('bar')"><i class="fas fa-chart-bar"></i></button>
-<button onclick="switchModalChart('line')"><i class="fas fa-chart-line"></i></button>
-<button onclick="switchModalChart('radar')"><i class="fas fa-chart-pie"></i></button>
-<button class="download-btn" onclick="downloadModalChart()"><i class="fas fa-image"></i></button>
-<button onclick="toggleModalNumbers()"><i class="fas fa-eye"></i></button>
-</div>
-</div>
-</div>
-
-<div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Done!</span></div>
 
 <script>
-const rawData=[
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"",frequency:"Several times a week",ease:"Difficult",usefulness:"Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"Yes",tracking:"Sometimes",mobileAccess:"Yes",reliability:"Sometimes Unreliable",problems:"Login/access problems, Slow loading, No major problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Commerce",year:"Third Year",usesLMS:"No",platform:"",frequency:"Occasionally",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Difficult",teacherComm:"No",tracking:"No",mobileAccess:"No",reliability:"Very Reliable",problems:"Login/access problems, Slow loading",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Several times a week",ease:"Easy",usefulness:"Moderately Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Sometimes",mobileAccess:"Yes",reliability:"Reliable",problems:"No major problems",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Occasionally",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Neutral"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Occasionally",ease:"Easy",usefulness:"Very Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems, Technical issues, Slow loading",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Commerce",year:"Postgraduate",usesLMS:"Yes",platform:"Google Classroom",frequency:"Occasionally",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Sometimes",mobileAccess:"Yes",reliability:"Reliable",problems:"No major problems",improves:"Yes",satisfaction:"Neutral"},
-{gender:"Female",faculty:"Science",year:"Third Year",usesLMS:"No",platform:"Microsoft Teams",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Difficult",teacherComm:"Yes",tracking:"No",mobileAccess:"No",reliability:"Sometimes Unreliable",problems:"Internet problems, Login/access problems, Difficult to understand/use",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Science",year:"Postgraduate",usesLMS:"Yes",platform:"Microsoft Teams",frequency:"Daily",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"No major problems",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Commerce",year:"Third Year",usesLMS:"No",platform:"Microsoft Teams",frequency:"Occasionally",ease:"Moderate",usefulness:"Moderately Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"No",tracking:"Sometimes",mobileAccess:"Sometimes",reliability:"Sometimes Unreliable",problems:"Other",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Management",year:"Third Year",usesLMS:"Yes",platform:"Microsoft Teams",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Login/access problems",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"College LMS",frequency:"Several times a week",ease:"Moderate",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems, Technical issues, Slow loading",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Commerce",year:"Other",usesLMS:"No",platform:"Other",frequency:"Occasionally",ease:"Difficult",usefulness:"Not Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"No",tracking:"No",mobileAccess:"No",reliability:"Unreliable",problems:"Technical issues",improves:"No",satisfaction:"Very Dissatisfied"},
-{gender:"Male",faculty:"Commerce",year:"Other",usesLMS:"No",platform:"Other",frequency:"Occasionally",ease:"Difficult",usefulness:"Not Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"No",tracking:"No",mobileAccess:"No",reliability:"Unreliable",problems:"Technical issues",improves:"No",satisfaction:"Very Dissatisfied"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"College LMS",frequency:"Several times a week",ease:"Moderate",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"No",tracking:"No",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems",improves:"No",satisfaction:"Neutral"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Occasionally",ease:"Very Easy",usefulness:"Very Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Neutral"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"No",platform:"College LMS",frequency:"Once a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Sometimes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems, Login/access problems, Difficult to understand/use, Slow loading, No major problems",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Several times a week",ease:"Moderate",usefulness:"Moderately Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"No major problems",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Management",year:"Postgraduate",usesLMS:"Yes",platform:"Other",frequency:"Daily",ease:"Very Easy",usefulness:"Very Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Slow loading",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Science",year:"Postgraduate",usesLMS:"Yes",platform:"College LMS",frequency:"Occasionally",ease:"Easy",usefulness:"Very Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems, Login/access problems",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Science",year:"Third Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Once a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"No",tracking:"Yes",mobileAccess:"Sometimes",reliability:"Reliable",problems:"No major problems",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Commerce",year:"Other",usesLMS:"Yes",platform:"Google Classroom",frequency:"Daily",ease:"Very Easy",usefulness:"Very Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"No major problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Once a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"No",tracking:"Sometimes",mobileAccess:"Sometimes",reliability:"Sometimes Unreliable",problems:"Other",improves:"To some extent",satisfaction:"Neutral"},
-{gender:"Female",faculty:"Science",year:"First Year",usesLMS:"Yes",platform:"",frequency:"Occasionally",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems",improves:"To some extent",satisfaction:"Neutral"},
-{gender:"Female",faculty:"Science",year:"Third Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Occasionally",ease:"Very Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"No",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"No major problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Female",faculty:"Commerce",year:"Third Year",usesLMS:"No",platform:"Other",frequency:"Occasionally",ease:"Difficult",usefulness:"Moderately Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"Yes",tracking:"Sometimes",mobileAccess:"Yes",reliability:"Sometimes Unreliable",problems:"Other",improves:"To some extent",satisfaction:"Neutral"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Daily",ease:"Easy",usefulness:"Very Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Sometimes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Other",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Science",year:"Other",usesLMS:"Yes",platform:"College LMS",frequency:"Occasionally",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Sometimes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems, Technical issues, Slow loading",improves:"To some extent",satisfaction:"Neutral"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Daily",ease:"Very Easy",usefulness:"Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Female",faculty:"Science",year:"Third Year",usesLMS:"No",platform:"Other",frequency:"Occasionally",ease:"Difficult",usefulness:"Not Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"No",tracking:"Sometimes",mobileAccess:"Sometimes",reliability:"Unreliable",problems:"Difficult to understand/use",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Moodle",frequency:"Daily",ease:"Moderate",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Sometimes",reliability:"Very Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Neutral"},
-{gender:"Female",faculty:"Science",year:"Postgraduate",usesLMS:"Yes",platform:"Google Classroom",frequency:"Occasionally",ease:"Very Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Technical issues",improves:"To some extent",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Occasionally",ease:"Easy",usefulness:"Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"No",tracking:"No",mobileAccess:"Yes",reliability:"Reliable",problems:"No major problems",improves:"To some extent",satisfaction:"Satisfied"},
-{gender:"Prefer not to say",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Occasionally",ease:"Moderate",usefulness:"Moderately Useful",assignmentConvenience:"Convenient",teacherComm:"No",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Difficult to understand/use",improves:"To some extent",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Occasionally",ease:"Very Easy",usefulness:"Very Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Internet problems, No major problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Female",faculty:"Science",year:"Third Year",usesLMS:"Yes",platform:"College LMS",frequency:"Occasionally",ease:"Easy",usefulness:"Moderately Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"No",tracking:"No",mobileAccess:"Yes",reliability:"Sometimes Unreliable",problems:"Other",improves:"To some extent",satisfaction:"Neutral"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"No",platform:"Google Classroom",frequency:"Several times a week",ease:"Difficult",usefulness:"Very Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"No",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Login/access problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Science",year:"Postgraduate",usesLMS:"Yes",platform:"Microsoft Teams",frequency:"Daily",ease:"Very Easy",usefulness:"Very Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"No major problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Other",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Difficult",teacherComm:"Yes",tracking:"Sometimes",mobileAccess:"No",reliability:"Reliable",problems:"Login/access problems, No major problems",improves:"Yes",satisfaction:"Neutral"},
-{gender:"Male",faculty:"Science",year:"Third Year",usesLMS:"No",platform:"Google Classroom",frequency:"Occasionally",ease:"Very Easy",usefulness:"Moderately Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"No",tracking:"No",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems",improves:"To some extent",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Science",year:"Postgraduate",usesLMS:"Yes",platform:"College LMS",frequency:"Occasionally",ease:"Easy",usefulness:"Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"No major problems",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Science",year:"Other",usesLMS:"Yes",platform:"Other",frequency:"Occasionally",ease:"Difficult",usefulness:"Not Useful",assignmentConvenience:"Difficult",teacherComm:"No",tracking:"Sometimes",mobileAccess:"Sometimes",reliability:"Sometimes Unreliable",problems:"Difficult to understand/use",improves:"Yes",satisfaction:"Very Dissatisfied"},
-{gender:"Female",faculty:"Science",year:"Third Year",usesLMS:"Yes",platform:"Microsoft Teams",frequency:"Several times a week",ease:"Very Easy",usefulness:"Useful",assignmentConvenience:"Very Convenient",teacherComm:"No",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"No major problems",improves:"To some extent",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Microsoft Teams",frequency:"Several times a week",ease:"Very Easy",usefulness:"Very Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"No major problems",improves:"To some extent",satisfaction:"Very Satisfied"},
-{gender:"Female",faculty:"Other",year:"Second Year",usesLMS:"No",platform:"Microsoft Teams",frequency:"Once a week",ease:"Moderate",usefulness:"Moderately Useful",assignmentConvenience:"Convenient",teacherComm:"No",tracking:"Sometimes",mobileAccess:"Sometimes",reliability:"Sometimes Unreliable",problems:"Slow loading",improves:"No",satisfaction:"Very Dissatisfied"},
-{gender:"Male",faculty:"Science",year:"Third Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Occasionally",ease:"Very Easy",usefulness:"Very Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"No major problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Science",year:"Third Year",usesLMS:"Yes",platform:"Other",frequency:"Daily",ease:"Very Easy",usefulness:"Very Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"No major problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Management",year:"Third Year",usesLMS:"Yes",platform:"College LMS",frequency:"Once a week",ease:"Moderate",usefulness:"Not Useful",assignmentConvenience:"Difficult",teacherComm:"Yes",tracking:"No",mobileAccess:"No",reliability:"Sometimes Unreliable",problems:"Difficult to understand/use",improves:"No",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"No",platform:"Microsoft Teams",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Login/access problems",improves:"Yes",satisfaction:"Neutral"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Daily",ease:"Very Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Internet problems, Login/access problems, Technical issues",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Sometimes",mobileAccess:"Yes",reliability:"Reliable",problems:"Login/access problems, Technical issues",improves:"To some extent",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Occasionally",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Sometimes",reliability:"Reliable",problems:"Internet problems, Login/access problems, Technical issues, Difficult to understand/use, Slow loading, No major problems",improves:"To some extent",satisfaction:"Very Satisfied"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"No",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems, Slow loading",improves:"To some extent",satisfaction:"Neutral"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems, Slow loading",improves:"No",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Commerce",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Several times a week",ease:"Easy",usefulness:"Very Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Internet problems",improves:"No",satisfaction:"Neutral"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"No",platform:"Other",frequency:"Occasionally",ease:"Difficult",usefulness:"Moderately Useful",assignmentConvenience:"Very Convenient",teacherComm:"No",tracking:"No",mobileAccess:"No",reliability:"Reliable",problems:"Internet problems, Login/access problems, Difficult to understand/use, Slow loading, No major problems, Other",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Science",year:"First Year",usesLMS:"Yes",platform:"Microsoft Teams",frequency:"Daily",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"No",tracking:"Yes",mobileAccess:"Sometimes",reliability:"Very Reliable",problems:"Login/access problems, Difficult to understand/use, No major problems",improves:"No",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Several times a week",ease:"Very Easy",usefulness:"Useful",assignmentConvenience:"Difficult",teacherComm:"No",tracking:"No",mobileAccess:"No",reliability:"Very Reliable",problems:"Slow loading",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Commerce",year:"Second Year",usesLMS:"Yes",platform:"Moodle",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"No",mobileAccess:"No",reliability:"Very Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Several times a week",ease:"Easy",usefulness:"Very Useful",assignmentConvenience:"Convenient",teacherComm:"No",tracking:"Sometimes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Neutral"},
-{gender:"Male",faculty:"Science",year:"Third Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Daily",ease:"Easy",usefulness:"Moderately Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Sometimes",mobileAccess:"No",reliability:"Reliable",problems:"Technical issues",improves:"No",satisfaction:"Neutral"},
-{gender:"Male",faculty:"Science",year:"Third Year",usesLMS:"Yes",platform:"Microsoft Teams",frequency:"Once a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Sometimes",mobileAccess:"Sometimes",reliability:"Unreliable",problems:"Other",improves:"To some extent",satisfaction:"Very Dissatisfied"},
-{gender:"Female",faculty:"Commerce",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Occasionally",ease:"Easy",usefulness:"Very Useful",assignmentConvenience:"Convenient",teacherComm:"No",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems, Slow loading",improves:"To some extent",satisfaction:"Satisfied"},
-{gender:"Prefer not to say",faculty:"Other",year:"Other",usesLMS:"Yes",platform:"Google Classroom",frequency:"Once a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Login/access problems, Technical issues, Difficult to understand/use",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Commerce",year:"First Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Once a week",ease:"Moderate",usefulness:"Moderately Useful",assignmentConvenience:"Convenient",teacherComm:"No",tracking:"Yes",mobileAccess:"Sometimes",reliability:"Sometimes Unreliable",problems:"Internet problems, Technical issues, Slow loading",improves:"To some extent",satisfaction:"Neutral"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems, Slow loading",improves:"To some extent",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Other",year:"Third Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Occasionally",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"No",tracking:"Yes",mobileAccess:"Yes",reliability:"Sometimes Unreliable",problems:"Internet problems, Login/access problems, Technical issues, Slow loading",improves:"To some extent",satisfaction:"Neutral"},
-{gender:"Male",faculty:"Other",year:"First Year",usesLMS:"No",platform:"Other",frequency:"Occasionally",ease:"Moderate",usefulness:"Moderately Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"No",tracking:"Sometimes",mobileAccess:"Sometimes",reliability:"Sometimes Unreliable",problems:"Slow loading",improves:"No",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Microsoft Teams",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Neutral"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"No",platform:"Google Classroom",frequency:"Once a week",ease:"Very Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems, Login/access problems, Technical issues",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Science",year:"Postgraduate",usesLMS:"Yes",platform:"Google Classroom",frequency:"Several times a week",ease:"Very Easy",usefulness:"Very Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Technical issues, Slow loading, No major problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Female",faculty:"Management",year:"Postgraduate",usesLMS:"Yes",platform:"Google Classroom",frequency:"Several times a week",ease:"Very Easy",usefulness:"Very Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Female",faculty:"Commerce",year:"Second Year",usesLMS:"Yes",platform:"Other",frequency:"Occasionally",ease:"Very Easy",usefulness:"Not Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"No",reliability:"Very Reliable",problems:"Other",improves:"No",satisfaction:"Dissatisfied"},
-{gender:"Female",faculty:"Commerce",year:"First Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Daily",ease:"Easy",usefulness:"Very Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Female",faculty:"Commerce",year:"First Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Daily",ease:"Very Easy",usefulness:"Very Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"No",mobileAccess:"No",reliability:"Very Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Commerce",year:"Second Year",usesLMS:"Yes",platform:"Moodle",frequency:"Several times a week",ease:"Very Easy",usefulness:"Moderately Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"No",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Difficult to understand/use",improves:"Yes",satisfaction:"Very Dissatisfied"},
-{gender:"Female",faculty:"Commerce",year:"First Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Daily",ease:"Very Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Science",year:"Postgraduate",usesLMS:"Yes",platform:"Moodle",frequency:"Occasionally",ease:"Very Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"No major problems",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Daily",ease:"Very Easy",usefulness:"Moderately Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"No",mobileAccess:"Yes",reliability:"Reliable",problems:"No major problems",improves:"No",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Science",year:"Other",usesLMS:"No",platform:"Moodle",frequency:"Several times a week",ease:"Moderate",usefulness:"Useful",assignmentConvenience:"Difficult",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Once a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Sometimes Unreliable",problems:"Internet problems, Login/access problems, Slow loading",improves:"To some extent",satisfaction:"Neutral"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Occasionally",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Sometimes",reliability:"Reliable",problems:"Technical issues, Slow loading, No major problems",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"No",mobileAccess:"Yes",reliability:"Reliable",problems:"Slow loading, Other",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Several times a week",ease:"Difficult",usefulness:"Very Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems, Slow loading",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"College LMS",frequency:"Daily",ease:"Moderate",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Sometimes",mobileAccess:"Yes",reliability:"Reliable",problems:"Technical issues",improves:"Yes",satisfaction:"Neutral"},
-{gender:"Male",faculty:"Arts",year:"First Year",usesLMS:"Yes",platform:"Moodle",frequency:"Daily",ease:"Easy",usefulness:"Moderately Useful",assignmentConvenience:"Difficult",teacherComm:"No",tracking:"Sometimes",mobileAccess:"No",reliability:"Reliable",problems:"Technical issues",improves:"Yes",satisfaction:"Neutral"},
-{gender:"Female",faculty:"Arts",year:"Third Year",usesLMS:"No",platform:"Moodle",frequency:"Daily",ease:"Easy",usefulness:"Not Useful",assignmentConvenience:"Convenient",teacherComm:"No",tracking:"Sometimes",mobileAccess:"Sometimes",reliability:"Sometimes Unreliable",problems:"Login/access problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Commerce",year:"First Year",usesLMS:"Yes",platform:"Microsoft Teams",frequency:"Once a week",ease:"Moderate",usefulness:"Very Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Sometimes",mobileAccess:"Sometimes",reliability:"Very Reliable",problems:"Login/access problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Arts",year:"First Year",usesLMS:"No",platform:"Other",frequency:"Occasionally",ease:"Difficult",usefulness:"Not Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"No",tracking:"Sometimes",mobileAccess:"Sometimes",reliability:"Unreliable",problems:"Slow loading",improves:"No",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Commerce",year:"Third Year",usesLMS:"Yes",platform:"College LMS",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"No",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Female",faculty:"Science",year:"Second Year",usesLMS:"Yes",platform:"",frequency:"Daily",ease:"Easy",usefulness:"Very Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Female",faculty:"Commerce",year:"Second Year",usesLMS:"Yes",platform:"",frequency:"Several times a week",ease:"Moderate",usefulness:"Very Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Very Reliable",problems:"Login/access problems, Technical issues, Slow loading",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Science",year:"Postgraduate",usesLMS:"Yes",platform:"College LMS",frequency:"Occasionally",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems, Technical issues",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Commerce",year:"Third Year",usesLMS:"Yes",platform:"College LMS",frequency:"Daily",ease:"Very Easy",usefulness:"Very Useful",assignmentConvenience:"Very Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"No",reliability:"Very Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Other",year:"Other",usesLMS:"No",platform:"Other",frequency:"Several times a week",ease:"Moderate",usefulness:"Not Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"No",tracking:"Sometimes",mobileAccess:"No",reliability:"Unreliable",problems:"Technical issues",improves:"Yes",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Commerce",year:"Third Year",usesLMS:"Yes",platform:"Microsoft Teams",frequency:"Daily",ease:"Very Easy",usefulness:"Very Useful",assignmentConvenience:"Difficult",teacherComm:"Yes",tracking:"No",mobileAccess:"Yes",reliability:"Reliable",problems:"Login/access problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Commerce",year:"Third Year",usesLMS:"Yes",platform:"Google Classroom",frequency:"Daily",ease:"Very Easy",usefulness:"Very Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"No",mobileAccess:"Yes",reliability:"Reliable",problems:"Technical issues",improves:"No",satisfaction:"Satisfied"},
-{gender:"Male",faculty:"Arts",year:"First Year",usesLMS:"Yes",platform:"College LMS",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Login/access problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Arts",year:"Second Year",usesLMS:"Yes",platform:"Moodle",frequency:"Once a week",ease:"Moderate",usefulness:"Useful",assignmentConvenience:"Difficult",teacherComm:"Yes",tracking:"Yes",mobileAccess:"No",reliability:"Reliable",problems:"Login/access problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Female",faculty:"Science",year:"Third Year",usesLMS:"Yes",platform:"Moodle",frequency:"Several times a week",ease:"Easy",usefulness:"Useful",assignmentConvenience:"I don't submit assignments through LMS",teacherComm:"Yes",tracking:"Yes",mobileAccess:"Yes",reliability:"Reliable",problems:"Internet problems",improves:"Yes",satisfaction:"Very Satisfied"},
-{gender:"Male",faculty:"Arts",year:"Other",usesLMS:"Yes",platform:"College LMS",frequency:"Several times a week",ease:"Easy",usefulness:"Moderately Useful",assignmentConvenience:"Convenient",teacherComm:"Yes",tracking:"No",mobileAccess:"Yes",reliability:"Sometimes Unreliable",problems:"Login/access problems",improves:"To some extent",satisfaction:"Very Satisfied"}
-];
+const API_URL = 'https://script.google.com/macros/s/AKfycbxzDfGgRIFxEECfddHhFn37S6IJVcHQXTgSCE4RfC_BdnNSk4Ftn91enbpse86LKzIrKg/exec';
 
-function countBy(arr,key){var c={};arr.forEach(function(i){var v=i[key]||'Not Specified';c[v]=(c[v]||0)+1});return c}
-function avgBy(arr,key,map){if(!arr.length)return 0;return arr.reduce(function(s,i){return s+(map[i[key]]!==undefined?map[i[key]]:0)},0)/arr.length}
-function countProblems(arr,key){var c={};arr.forEach(function(i){(i[key]||'').split(',').forEach(function(p){var pr=p.trim();if(pr&&pr!=='No major problems')c[pr]=(c[pr]||0)+1})});return c}
-function sortObj(o){return Object.entries(o).sort(function(a,b){return b[1]-a[1]})}
-function esc(v){return String(v||'').replace(/[&<>"']/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]})}
+let rawData = [];
+let charts = {};
+let chartData = {};
+let showNums = {};
+let currentMd = '';
+let mdChart = null;
 
-var easeMap={'Very Easy':5,'Easy':4,'Moderate':3,'Difficult':2,'Very Difficult':1};
-var usefulnessMap={'Very Useful':5,'Useful':4,'Moderately Useful':3,'Not Useful':2,'Not at all Useful':1};
-var reliabilityMap={'Very Reliable':5,'Reliable':4,'Sometimes Unreliable':3,'Unreliable':2,'Very Unreliable':1};
-var convenienceMap={'Very Convenient':5,'Convenient':4,'Moderately Convenient':3,'Difficult':2,"I don't submit assignments through LMS":0};
-var commMap={'Yes':1,'No':0,'Sometimes':0.5};
-var trackingMap={'Yes':1,'No':0,'Sometimes':0.5};
-var improveMap={'Yes':1,'To some extent':0.5,'No':0};
-var satisfactionMap={'Very Satisfied':5,'Satisfied':4,'Neutral':3,'Dissatisfied':2,'Very Dissatisfied':1};
+function countBy(a,k){const c={};a.forEach(x=>{const v=x[k]||'Not Specified';c[v]=(c[v]||0)+1});return c}
+function avgBy(a,k,m){if(!a.length)return 0;return a.reduce((s,x)=>s+(m[x[k]]!==undefined?m[x[k]]:0),0)/a.length}
+function countProblems(a,k){const c={};a.forEach(x=>{(x[k]||'').split(',').forEach(p=>{const q=p.trim();if(q&&q!=='No major problems')c[q]=(c[q]||0)+1})});return c}
+function sortObj(o){return Object.entries(o).sort((a,b)=>b[1]-a[1])}
+function esc(v){return String(v||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
-var total=rawData.length;
-var avgUsefulness=avgBy(rawData,'usefulness',usefulnessMap);
-var avgEase=avgBy(rawData,'ease',easeMap);
-var avgReliability=avgBy(rawData,'reliability',reliabilityMap);
-var avgConvenience=avgBy(rawData,'assignmentConvenience',convenienceMap);
-var avgCommunication=avgBy(rawData,'teacherComm',commMap);
-var avgTracking=avgBy(rawData,'tracking',trackingMap);
-var satisfactionPercent=(rawData.filter(function(d){return d.satisfaction==='Very Satisfied'||d.satisfaction==='Satisfied'}).length/total*100);
-var improvePercent=(rawData.filter(function(d){return d.improves==='Yes'}).length/total*100);
+const easeM={'Very Easy':5,'Easy':4,'Moderate':3,'Difficult':2,'Very Difficult':1};
+const usefulM={'Very Useful':5,'Useful':4,'Moderately Useful':3,'Not Useful':2,'Not at all Useful':1};
+const relM={'Very Reliable':5,'Reliable':4,'Sometimes Unreliable':3,'Unreliable':2,'Very Unreliable':1};
+const convM={'Very Convenient':5,'Convenient':4,'Moderately Convenient':3,'Difficult':2,"I don't submit assignments through LMS":0};
+const commM={'Yes':1,'No':0,'Sometimes':0.5};
+const trackM={'Yes':1,'No':0,'Sometimes':0.5};
+const improvM={'Yes':1,'To some extent':0.5,'No':0};
+const satM={'Very Satisfied':5,'Satisfied':4,'Neutral':3,'Dissatisfied':2,'Very Dissatisfied':1};
 
-var genderCounts=countBy(rawData,'gender');
-var yearCounts=countBy(rawData,'year');
-var facultyCounts=countBy(rawData,'faculty');
-var usageCounts=countBy(rawData,'usesLMS');
-var platformCounts=countBy(rawData,'platform');
-var frequencyCounts=countBy(rawData,'frequency');
-var satisfactionCounts=countBy(rawData,'satisfaction');
-var improveCounts=countBy(rawData,'improves');
-var mobileAccessCounts=countBy(rawData,'mobileAccess');
-var problemCounts=countProblems(rawData,'problems');
-
-var suggestions=[
-'"Improve mobile performance, easier navigation, timely notifications, and easier access to study materials."',
-'"Enhancing user engagement, accessibility, and personalization."',
-'"User-friendly interface, faster loading, easy navigation, and better access."',
-'"Improve navigation, speed, and mobile responsiveness."',
-'"An offline mode will be great for us."',
-'"Please give no network problems."',
-'"Improve user experience."',
-'"Nothing, It is very easy and convenient for students."',
-'"Look for more feedback."',
-'"Very good."',
-'"Nothing to improve."',
-'"Improve the user interface, reduce technical issues, and make the LMS faster."',
-'"Add interactive features like quizzes, badges, progress tracking."',
-'"Face login must be removed that takes a lot of time."'
-];
-
-var COLORS={
-gender:['#4f46e5','#ec4899','#6b7280'],
-year:['#4f46e5','#6366f1','#818cf8','#a78bfa','#c4b5fd'],
-faculty:['#059669','#10b981','#34d399','#6ee7b7'],
-usage:['#22c55e','#ef4444'],
-platform:['#4f46e5','#6366f1','#818cf8','#a78bfa','#c4b5fd','#ddd6fe'],
-frequency:['#4f46e5','#6366f1','#818cf8','#a78bfa','#c4b5fd'],
-satisfaction:['#22c55e','#4ade80','#fbbf24','#f87171','#dc2626'],
-improve:['#22c55e','#fbbf24','#ef4444'],
-mobile:['#4f46e5','#818cf8','#fbbf24'],
-problems:['#dc2626','#ef4444','#f87171','#fca5a5','#fbbf24','#fcd34d','#f59e0b']
+const COL={
+  gender:['#4f46e5','#ec4899','#6b7280'],
+  year:['#4f46e5','#6366f1','#818cf8','#a78bfa','#c4b5fd'],
+  faculty:['#059669','#10b981','#34d399','#6ee7b7','#a7f3d0'],
+  usage:['#22c55e','#ef4444'],
+  platform:['#4f46e5','#6366f1','#818cf8','#a78bfa','#c4b5fd','#ddd6fe'],
+  frequency:['#4f46e5','#6366f1','#818cf8','#a78bfa','#c4b5fd'],
+  satisfaction:['#22c55e','#4ade80','#fbbf24','#f87171','#dc2626'],
+  improve:['#22c55e','#fbbf24','#ef4444'],
+  mobile:['#4f46e5','#818cf8','#fbbf24'],
+  problems:['#dc2626','#ef4444','#f87171','#fca5a5','#fbbf24','#fcd34d','#f59e0b']
 };
 
-var chartInstances={};
-var chartData={};
-var showNumbersState={};
-
-function buildChart(id,type,labels,data,colors,showNumbers){
-showNumbers=showNumbers||false;
-var ctx=document.getElementById(id);if(!ctx)return null;
-if(chartInstances[id]){chartInstances[id].destroy();delete chartInstances[id]}
-var isPie=(type==='pie'||type==='doughnut');
-var isBar=(type==='bar');
-var isLine=(type==='line');
-var isRadar=(type==='radar');
-var chartKey=id.replace('Chart','');
-showNumbersState[chartKey]=showNumbers;
-var config={type:type,data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderColor:isPie?'#fff':colors,borderWidth:isPie?2:1,borderRadius:isBar?6:0,borderSkipped:isBar?false:undefined,tension:isLine?0.3:undefined,fill:isLine?true:false,pointBackgroundColor:isLine?colors:undefined,pointRadius:isLine?3:undefined}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:isPie?'bottom':'top',labels:{font:{size:isPie?10:9,weight:'600'},padding:isPie?10:6,boxWidth:isPie?10:8},display:!isRadar},datalabels:{display:isPie&&showNumbers,color:'#ffffff',font:{weight:'bold',size:10},formatter:function(value,ctx){var t=ctx.dataset.data.reduce(function(a,b){return a+b},0);var p=t>0?((value/t)*100).toFixed(2):0;return value+' ('+p+'%)'},anchor:'center',align:'center',offset:0}},scales:isPie?undefined:{y:{beginAtZero:true,ticks:{stepSize:isBar?1:undefined,font:{weight:'600',size:9}},grid:{color:'rgba(0,0,0,0.06)'}},x:{ticks:{font:{size:9,weight:'600'}},grid:{display:false}}},cutout:type==='doughnut'?'55%':undefined}},plugins:isPie?[ChartDataLabels]:[]};
-if(isRadar){config.options.scales={r:{beginAtZero:true,ticks:{stepSize:1},pointLabels:{font:{size:9,weight:'600'}},grid:{color:'rgba(0,0,0,0.06)'}}};config.options.plugins.legend.display=true;config.options.plugins.datalabels={display:false}}
-if(isBar&&showNumbers){config.options.plugins.datalabels={display:true,color:'#4a4a6a',font:{weight:'bold',size:9},anchor:'end',align:'end',offset:3,formatter:function(v){return v}}}
-var chart=new Chart(ctx,config);
-chartInstances[id]=chart;return chart;
+function buildChart(id,type,labels,data,colors,show){
+  show=show||false;
+  const cv=document.getElementById(id);if(!cv)return null;
+  if(charts[id]){charts[id].destroy();delete charts[id]}
+  const isPie=type==='pie'||type==='doughnut';
+  const isBar=type==='bar';
+  const isLine=type==='line';
+  const isRadar=type==='radar';
+  const key=id.replace('Chart','');
+  showNums[key]=show;
+  const cfg={type:type,data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderColor:isPie?'#fff':colors,borderWidth:isPie?2:1,borderRadius:isBar?6:0,borderSkipped:isBar?false:undefined,tension:isLine?0.3:undefined,fill:isLine?true:false,pointRadius:isLine?3:undefined}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:isPie?'bottom':'top',labels:{font:{size:isPie?10:9,weight:'600'},padding:isPie?10:6,boxWidth:isPie?10:8},display:!isRadar},datalabels:{display:isPie&&show,color:'#fff',font:{weight:'bold',size:10},formatter:(v,ctx)=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0);const p=t>0?((v/t)*100).toFixed(2):0;return v+' ('+p+'%)'},anchor:'center',align:'center'}},scales:isPie?undefined:{y:{beginAtZero:true,ticks:{stepSize:isBar?1:undefined,font:{size:9,weight:'600'}},grid:{color:'rgba(0,0,0,.06)'}},x:{ticks:{font:{size:9,weight:'600'}},grid:{display:false}}},cutout:type==='doughnut'?'55%':undefined}},plugins:isPie?[ChartDataLabels]:[]};
+  if(isRadar){cfg.options.scales={r:{beginAtZero:true,ticks:{stepSize:1},pointLabels:{font:{size:9,weight:'600'}},grid:{color:'rgba(0,0,0,.06)'}}};cfg.options.plugins.legend.display=true;cfg.options.plugins.datalabels={display:false}}
+  if(isBar&&show){cfg.options.plugins.datalabels={display:true,color:'#4a4a6a',font:{weight:'bold',size:9},anchor:'end',align:'end',offset:3,formatter:v=>v}}
+  charts[id]=new Chart(cv,cfg);return charts[id];
 }
 
-function handleCardClick(chartKey){
-var cur=showNumbersState[chartKey]||false;
-if(!cur){showNumbersState[chartKey]=true;
-var chartId=chartKey+'Chart';var data=chartData[chartKey];
-if(data){var card=document.querySelector('[data-chart="'+chartKey+'"]');var type='doughnut';
-if(card){var btn=card.querySelector('.action-btn.active');if(btn){var o=btn.getAttribute('onclick')||'';if(o.indexOf('bar')>-1)type='bar';else if(o.indexOf('pie')>-1)type='pie';else if(o.indexOf('line')>-1)type='line';else if(o.indexOf('radar')>-1)type='radar'}}
-buildChart(chartId,type,data.labels,data.data,data.colors,true);
-var hint=card?card.querySelector('.chart-hint .click-text'):null;if(hint){hint.textContent='📊 Numbers visible';hint.classList.add('visible')}}}
-openModal(chartKey);
+function render(){
+  const total=rawData.length;
+  const avgU=avgBy(rawData,'usefulness',usefulM);
+  const avgE=avgBy(rawData,'ease',easeM);
+  const avgR=avgBy(rawData,'reliability',relM);
+  const avgC=avgBy(rawData,'assignmentConvenience',convM);
+  const avgCm=avgBy(rawData,'teacherComm',commM);
+  const avgT=avgBy(rawData,'tracking',trackM);
+  const satP=(rawData.filter(d=>d.satisfaction==='Very Satisfied'||d.satisfaction==='Satisfied').length/total*100)||0;
+  const impP=(rawData.filter(d=>d.improves==='Yes').length/total*100)||0;
+
+  document.getElementById('cTotal').textContent=total;
+  document.getElementById('ftTotal').textContent=total;
+  document.getElementById('cUse').textContent=avgU.toFixed(2);
+  document.getElementById('cEase').textContent=avgE.toFixed(2);
+  document.getElementById('cRel').textContent=avgR.toFixed(2);
+  document.getElementById('cSat').innerHTML=satP.toFixed(2)+'<span class="s">%</span>';
+  document.getElementById('cImp').innerHTML=impP.toFixed(2)+'<span class="s">%</span>';
+  document.getElementById('cBU').style.width=(avgU/5*100)+'%';
+  document.getElementById('cBE').style.width=(avgE/5*100)+'%';
+  document.getElementById('cBR').style.width=(avgR/5*100)+'%';
+  document.getElementById('cBS').style.width=satP+'%';
+  document.getElementById('cBI').style.width=impP+'%';
+
+  document.getElementById('iSat').textContent=satP.toFixed(2)+'%';
+  document.getElementById('iSatD').textContent=(rawData.filter(d=>d.satisfaction==='Very Satisfied').length+rawData.filter(d=>d.satisfaction==='Satisfied').length)+' of '+total+' satisfied.';
+  const cs=[['Usefulness',avgU,5],['Ease',avgE,5],['Reliability',avgR,5],['Assignment',avgC,5],['Teacher Comm.',avgCm,1],['Tracking',avgT,1]];
+  const st=cs.slice().sort((a,b)=>(b[1]/b[2])-(a[1]/a[2]))[0];
+  document.getElementById('iStr').textContent=st[0];
+  document.getElementById('iStrD').textContent=st[1].toFixed(2)+' / '+st[2];
+  const iss=sortObj(countProblems(rawData,'problems'));
+  document.getElementById('iRisk').textContent=iss[0]?iss[0][0]:'No major issue';
+  document.getElementById('iRiskD').textContent=iss[0]?iss[0][1]+' mentions':'—';
+  const adopt=rawData.filter(d=>d.usesLMS==='Yes').length/total*100;
+  document.getElementById('iAdopt').textContent=adopt.toFixed(2)+'%';
+  document.getElementById('iAdoptD').textContent=rawData.filter(d=>d.usesLMS==='Yes').length+' of '+total+' use LMS.';
+
+  const g=sortObj(countBy(rawData,'gender'));
+  const y=sortObj(countBy(rawData,'year'));
+  const f=sortObj(countBy(rawData,'faculty'));
+  const u=sortObj(countBy(rawData,'usesLMS'));
+  const p=sortObj(countBy(rawData,'platform'));
+  const fr=sortObj(countBy(rawData,'frequency'));
+  const so=['Very Satisfied','Satisfied','Neutral','Dissatisfied','Very Dissatisfied'];
+  const ss=sortObj(countBy(rawData,'satisfaction'));
+  const sl=so.filter(l=>ss.some(d=>d[0]===l));
+  const sd=sl.map(l=>{const x=ss.find(d=>d[0]===l);return x?x[1]:0});
+  const im=sortObj(countBy(rawData,'improves'));
+  const m=sortObj(countBy(rawData,'mobileAccess'));
+  const pr=sortObj(countProblems(rawData,'problems'));
+
+  chartData.gender={labels:g.map(d=>d[0]),data:g.map(d=>d[1]),colors:COL.gender};
+  chartData.year={labels:y.map(d=>d[0]),data:y.map(d=>d[1]),colors:COL.year};
+  chartData.faculty={labels:f.map(d=>d[0]),data:f.map(d=>d[1]),colors:COL.faculty};
+  chartData.usage={labels:u.map(d=>d[0]==='Yes'?'Use LMS':'Do Not Use'),data:u.map(d=>d[1]),colors:COL.usage};
+  chartData.platform={labels:p.map(d=>d[0]||'Not Specified'),data:p.map(d=>d[1]),colors:COL.platform};
+  chartData.frequency={labels:fr.map(d=>d[0]),data:fr.map(d=>d[1]),colors:COL.frequency};
+  chartData.perception={labels:['Usefulness','Ease','Reliability','Assignment','Teacher Comm.','Tracking'],data:[avgU,avgE,avgR,avgC,avgCm,avgT],colors:['#4f46e5','#059669','#d97706','#db2777','#7c3aed','#0d9488']};
+  chartData.satisfaction={labels:sl,data:sd,colors:COL.satisfaction};
+  chartData.improve={labels:im.map(d=>d[0]),data:im.map(d=>d[1]),colors:im.map(d=>d[0]==='Yes'?'#22c55e':d[0]==='To some extent'?'#f59e0b':'#ef4444')};
+  chartData.mobile={labels:m.map(d=>d[0]),data:m.map(d=>d[1]),colors:COL.mobile};
+  chartData.problems={labels:pr.map(d=>d[0]),data:pr.map(d=>d[1]),colors:COL.problems};
+
+  const G=document.getElementById('grid');
+  G.innerHTML='';
+  const cards=[
+    {id:'gender',ttl:'Gender',icon:'fa-venus-mars',types:['doughnut','pie','bar']},
+    {id:'year',ttl:'Academic Year',icon:'fa-users',types:['doughnut','pie','bar']},
+    {id:'faculty',ttl:'Faculty',icon:'fa-building-columns',types:['doughnut','pie','bar']},
+    {id:'usage',ttl:'LMS Adoption',icon:'fa-check-circle',types:['doughnut','pie','bar']},
+    {id:'platform',ttl:'Platform',icon:'fa-laptop',types:['bar','pie','doughnut']},
+    {id:'frequency',ttl:'Frequency',icon:'fa-clock',types:['bar','pie','doughnut']},
+    {id:'perception',ttl:'Perception Scores',icon:'fa-star',full:true,scores:true,types:['bar','line','radar']},
+    {id:'satisfaction',ttl:'Satisfaction',icon:'fa-smile',full:true,types:['bar','pie','doughnut']},
+    {id:'improve',ttl:'Improvement',icon:'fa-graduation-cap',types:['doughnut','pie','bar']},
+    {id:'mobile',ttl:'Mobile Access',icon:'fa-mobile-alt',types:['doughnut','pie','bar']},
+    {id:'problems',ttl:'Challenges',icon:'fa-exclamation-triangle',full:true,types:['bar','pie','doughnut']}
+  ];
+  cards.forEach(c=>{
+    const div=document.createElement('div');
+    div.className='cd'+(c.full?' cd-full':'');
+    div.dataset.chart=c.id;
+    let scHtml='';
+    if(c.scores){
+      scHtml='<div class="sc">'+
+        '<div class="sc-i"><div class="v">'+avgU.toFixed(2)+' <span class="m">/5</span></div><div class="l">Usefulness</div><div class="bg"><div class="fl us" style="width:'+(avgU/5*100)+'%"></div></div></div>'+
+        '<div class="sc-i"><div class="v">'+avgE.toFixed(2)+' <span class="m">/5</span></div><div class="l">Ease</div><div class="bg"><div class="fl ea" style="width:'+(avgE/5*100)+'%"></div></div></div>'+
+        '<div class="sc-i"><div class="v">'+avgR.toFixed(2)+' <span class="m">/5</span></div><div class="l">Reliability</div><div class="bg"><div class="fl re" style="width:'+(avgR/5*100)+'%"></div></div></div>'+
+        '<div class="sc-i"><div class="v">'+avgC.toFixed(2)+' <span class="m">/5</span></div><div class="l">Assignment</div><div class="bg"><div class="fl co" style="width:'+(avgC/5*100)+'%"></div></div></div>'+
+        '<div class="sc-i"><div class="v">'+avgCm.toFixed(2)+' <span class="m">/1</span></div><div class="l">Teacher Comm.</div><div class="bg"><div class="fl cm" style="width:'+(avgCm*100)+'%"></div></div></div>'+
+        '<div class="sc-i"><div class="v">'+avgT.toFixed(2)+' <span class="m">/1</span></div><div class="l">Tracking</div><div class="bg"><div class="fl tr" style="width:'+(avgT*100)+'%"></div></div></div>'+
+        '</div>';
+    }
+    const btnHtml='<div class="bts" onclick="event.stopPropagation();">'+
+      c.types.map((t,i)=>'<button class="bt'+(i===0?' on':'')+'" onclick="switchType(\''+c.id+'\',\''+t+'\',event)">'+
+        '<i class="fas fa-'+(t==='bar'?'chart-bar':t==='pie'?'chart-pie':t==='line'?'chart-line':t==='radar'?'chart-pie':'circle')+'"></i></button>').join('')+
+      '</div>';
+    div.innerHTML=
+      '<div class="cd-hd"><h3><i class="fas '+c.icon+'"></i>'+c.ttl+'</h3>'+btnHtml+'</div>'+
+      scHtml+
+      '<div class="ch'+(c.full?' t':'')+'"><canvas id="'+c.id+'Chart"></canvas></div>'+
+      '<div class="hint"><span id="hint-'+c.id+'">👆 Tap to expand</span></div>';
+    div.addEventListener('click',()=>openCard(c.id));
+    G.appendChild(div);
+    const d=chartData[c.id];
+    buildChart(c.id+'Chart',c.types[0],d.labels,d.data,d.colors,false);
+  });
+
+  const p2=document.createElement('div');
+  p2.className='cd cd-full';
+  p2.innerHTML='<div class="cd-hd"><h3><i class="fas fa-table"></i>Responses ('+total+')</h3></div>'+
+    '<div class="tw"><table><thead><tr><th>#</th><th>Faculty</th><th>Year</th><th>Gender</th><th>LMS</th><th>Platform</th><th>Frequency</th><th>Useful</th><th>Ease</th><th>Reliable</th><th>Satisfaction</th></tr></thead><tbody>'+
+    rawData.map((d,i)=>{
+      const sc=(d.satisfaction==='Very Satisfied'||d.satisfaction==='Satisfied')?'g':(d.satisfaction==='Neutral'?'w':'b');
+      const uc=d.usesLMS==='Yes'?'g':'w';
+      return '<tr><td>'+(i+1)+'</td><td>'+esc(d.faculty)+'</td><td>'+esc(d.year)+'</td><td>'+esc(d.gender)+'</td><td><span class="pill '+uc+'">'+esc(d.usesLMS)+'</span></td><td>'+esc(d.platform||'—')+'</td><td>'+esc(d.frequency)+'</td><td>'+esc(d.usefulness)+'</td><td>'+esc(d.ease)+'</td><td>'+esc(d.reliability)+'</td><td><span class="pill '+sc+'">'+esc(d.satisfaction)+'</span></td></tr>'
+    }).join('')+
+    '</tbody></table></div>';
+  G.appendChild(p2);
 }
 
-function closeModalAndHideNumbers(){
-var id=modalChartId;
-if(id&&showNumbersState[id]){showNumbersState[id]=false;
-var chartId=id+'Chart';var data=chartData[id];
-if(data){var card=document.querySelector('[data-chart="'+id+'"]');var type='doughnut';
-if(card){var btn=card.querySelector('.action-btn.active');if(btn){var o=btn.getAttribute('onclick')||'';if(o.indexOf('bar')>-1)type='bar';else if(o.indexOf('pie')>-1)type='pie';else if(o.indexOf('line')>-1)type='line';else if(o.indexOf('radar')>-1)type='radar'}}
-buildChart(chartId,type,data.labels,data.data,data.colors,false);
-var hint=card?card.querySelector('.chart-hint .click-text'):null;if(hint){hint.textContent='👆 Tap to expand';hint.classList.remove('visible')}}}
-document.getElementById('modalOverlay').classList.remove('active');
-if(modalChartInstance){modalChartInstance.destroy();modalChartInstance=null}
+function switchType(id,type,ev){
+  ev.stopPropagation();
+  const d=chartData[id];if(!d)return;
+  buildChart(id+'Chart',type,d.labels,d.data,d.colors,showNums[id]||false);
+  const cd=document.querySelector('[data-chart="'+id+'"]');
+  if(cd){cd.querySelectorAll('.bt').forEach(b=>b.classList.remove('on'));ev.target.closest('.bt').classList.add('on')}
 }
 
-function initCharts(){
-var g=sortObj(genderCounts);chartData.gender={labels:g.map(function(d){return d[0]}),data:g.map(function(d){return d[1]}),colors:COLORS.gender};buildChart('genderChart','doughnut',chartData.gender.labels,chartData.gender.data,chartData.gender.colors,false);
-var y=sortObj(yearCounts);chartData.year={labels:y.map(function(d){return d[0]}),data:y.map(function(d){return d[1]}),colors:COLORS.year};buildChart('yearChart','doughnut',chartData.year.labels,chartData.year.data,chartData.year.colors,false);
-var f=sortObj(facultyCounts);chartData.faculty={labels:f.map(function(d){return d[0]}),data:f.map(function(d){return d[1]}),colors:COLORS.faculty};buildChart('facultyChart','doughnut',chartData.faculty.labels,chartData.faculty.data,chartData.faculty.colors,false);
-var u=sortObj(usageCounts);chartData.usage={labels:u.map(function(d){return d[0]==='Yes'?'Use LMS':'Do Not Use'}),data:u.map(function(d){return d[1]}),colors:COLORS.usage};buildChart('usageChart','doughnut',chartData.usage.labels,chartData.usage.data,chartData.usage.colors,false);
-var p=sortObj(platformCounts);chartData.platform={labels:p.map(function(d){return d[0]||'Not Specified'}),data:p.map(function(d){return d[1]}),colors:COLORS.platform};buildChart('platformChart','bar',chartData.platform.labels,chartData.platform.data,chartData.platform.colors,false);
-var fr=sortObj(frequencyCounts);chartData.frequency={labels:fr.map(function(d){return d[0]}),data:fr.map(function(d){return d[1]}),colors:COLORS.frequency};buildChart('frequencyChart','bar',chartData.frequency.labels,chartData.frequency.data,chartData.frequency.colors,false);
-chartData.perception={labels:['Usefulness','Ease','Reliability','Assignment','Teacher Comm.','Tracking'],data:[avgUsefulness,avgEase,avgReliability,avgConvenience,avgCommunication,avgTracking],colors:['#4f46e5','#059669','#d97706','#db2777','#7c3aed','#0d9488']};buildChart('perceptionChart','bar',chartData.perception.labels,chartData.perception.data,chartData.perception.colors,false);
-var so=['Very Satisfied','Satisfied','Neutral','Dissatisfied','Very Dissatisfied'];var ss=sortObj(satisfactionCounts);var sl=so.filter(function(l){return ss.some(function(d){return d[0]===l})});var sd=sl.map(function(l){var x=ss.find(function(d){return d[0]===l});return x?x[1]:0});chartData.satisfaction={labels:sl,data:sd,colors:COLORS.satisfaction};buildChart('satisfactionChart','bar',chartData.satisfaction.labels,chartData.satisfaction.data,chartData.satisfaction.colors,false);
-var im=sortObj(improveCounts);var imC=im.map(function(d){return d[0]==='Yes'?'#22c55e':d[0]==='To some extent'?'#f59e0b':'#ef4444'});chartData.improve={labels:im.map(function(d){return d[0]}),data:im.map(function(d){return d[1]}),colors:imC};buildChart('improveChart','doughnut',chartData.improve.labels,chartData.improve.data,chartData.improve.colors,false);
-var m=sortObj(mobileAccessCounts);chartData.mobile={labels:m.map(function(d){return d[0]}),data:m.map(function(d){return d[1]}),colors:COLORS.mobile};buildChart('mobileChart','doughnut',chartData.mobile.labels,chartData.mobile.data,chartData.mobile.colors,false);
-var pr=sortObj(problemCounts);chartData.problems={labels:pr.map(function(d){return d[0]}),data:pr.map(function(d){return d[1]}),colors:COLORS.problems};buildChart('problemsChart','bar',chartData.problems.labels,chartData.problems.data,chartData.problems.colors,false);
+function openCard(id){
+  const d=chartData[id];if(!d)return;
+  currentMd=id;
+  const ttl=document.querySelector('[data-chart="'+id+'"] h3');
+  document.getElementById('mdTtl').textContent=ttl?ttl.textContent:id;
+  document.getElementById('md').classList.add('on');
+  const show=showNums[id]||false;
+  if(mdChart){mdChart.destroy();mdChart=null}
+  mdChart=buildChart('mdC','doughnut',d.labels,d.data,d.colors,show);
+}
+function closeMd(){
+  if(currentMd){showNums[currentMd]=false;const d=chartData[currentMd];if(d)buildChart(currentMd+'Chart',getActiveType(currentMd),d.labels,d.data,d.colors,false);const h=document.getElementById('hint-'+currentMd);if(h)h.textContent='👆 Tap to expand'}
+  document.getElementById('md').classList.remove('on');
+  if(mdChart){mdChart.destroy();mdChart=null}
+}
+function getActiveType(id){const cd=document.querySelector('[data-chart="'+id+'"]');if(cd){const on=cd.querySelector('.bt.on');if(on){const o=on.getAttribute('onclick')||'';if(o.indexOf('pie')>-1)return 'pie';if(o.indexOf('doughnut')>-1)return 'doughnut';if(o.indexOf('bar')>-1)return 'bar';if(o.indexOf('line')>-1)return 'line';if(o.indexOf('radar')>-1)return 'radar'}}return 'doughnut'}
+function mdType(type){const d=chartData[currentMd];if(!d||!mdChart)return;mdChart.destroy();mdChart=buildChart('mdC',type,d.labels,d.data,d.colors,showNums[currentMd]||false)}
+function mdDL(){const c=document.getElementById('mdC');const l=document.createElement('a');l.download='chart_'+currentMd+'.png';l.href=c.toDataURL('image/png');l.click()}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMd()});
+
+async function load(){
+  const G=document.getElementById('grid');
+  try{
+    const res=await fetch(API_URL);
+    const data=await res.json();
+    if(!Array.isArray(data))throw new Error('API returned: '+JSON.stringify(data));
+    rawData=data;
+    render();
+    showNums[rawData.length?'']=false;
+    console.log('✅ Loaded '+rawData.length+' responses');
+  }catch(err){
+    console.error(err);
+    G.innerHTML='<div class="err"><i class="fas fa-exclamation-triangle" style="font-size:32px;display:block;margin-bottom:12px"></i>Could not load data.<br><small>'+esc(err.message)+'</small></div>';
+  }
 }
 
-function switchChart(id,type){var data=chartData[id];if(!data)return;
-buildChart(id+'Chart',type,data.labels,data.data,data.colors,showNumbersState[id]||false);
-var card=document.querySelector('[data-chart="'+id+'"]');if(card){card.querySelectorAll('.action-btn').forEach(function(b){b.classList.remove('active')});var ab=card.querySelector('.action-btn[onclick*="'+type+'"]');if(ab)ab.classList.add('active')}}
-
-var modalChartInstance=null;var modalChartId='';var modalNumbersVisible=false;
-function openModal(id){var data=chartData[id];if(!data)return;modalChartId=id;
-var h=document.querySelector('[data-chart="'+id+'"] .card-header h3');
-document.getElementById('modalTitle').textContent=h?h.textContent:id;
-document.getElementById('modalOverlay').classList.add('active');
-if(modalChartInstance){modalChartInstance.destroy();modalChartInstance=null}
-modalNumbersVisible=showNumbersState[id]||false;
-modalChartInstance=buildChart('modalChart','doughnut',data.labels,data.data,data.colors,modalNumbersVisible)}
-function closeModal(){closeModalAndHideNumbers()}
-function switchModalChart(type){var data=chartData[modalChartId];if(!data||!modalChartInstance)return;modalChartInstance.destroy();modalChartInstance=buildChart('modalChart',type,data.labels,data.data,data.colors,modalNumbersVisible)}
-function downloadModalChart(){var c=document.getElementById('modalChart');var l=document.createElement('a');l.download='chart_'+modalChartId+'.png';l.href=c.toDataURL('image/png');l.click();showToast('📸 Downloaded!')}
-function toggleModalNumbers(){modalNumbersVisible=!modalNumbersVisible;var data=chartData[modalChartId];if(!data||!modalChartInstance)return;modalChartInstance.destroy();modalChartInstance=buildChart('modalChart','doughnut',data.labels,data.data,data.colors,modalNumbersVisible)}
-
-var darkMode=false;
-document.getElementById('themeToggle').addEventListener('click',function(){darkMode=!darkMode;document.documentElement.setAttribute('data-theme',darkMode?'dark':'light');this.innerHTML=darkMode?'<i class="fas fa-sun"></i>':'<i class="fas fa-moon"></i>';showToast(darkMode?'🌙 Dark mode':'☀️ Light mode');setTimeout(initCharts,100)});
-
-document.getElementById('exportData').addEventListener('click',function(){var e={total:total,metrics:{avgUsefulness:avgUsefulness.toFixed(2),avgEase:avgEase.toFixed(2),avgReliability:avgReliability.toFixed(2),satisfactionPercent:satisfactionPercent.toFixed(2),improvePercent:improvePercent.toFixed(2)},rawData:rawData};var b=new Blob([JSON.stringify(e,null,2)],{type:'application/json'});var l=document.createElement('a');l.download='lms_data.json';l.href=URL.createObjectURL(b);l.click();URL.revokeObjectURL(l.href);showToast('📥 Exported!')});
-
-document.getElementById('refreshBtn').addEventListener('click',function(){initCharts();updateStats();renderTable(rawData);updateInsightCards(rawData);showToast('🔄 Refreshed!')});
-
-var toastTimeout;
-function showToast(msg){var t=document.getElementById('toast');document.getElementById('toastMessage').textContent=msg;t.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(function(){t.classList.remove('show')},2000)}
-
-function updateStats(){
-document.getElementById('totalResponses').textContent=total;
-document.getElementById('footerTotal').textContent=total;
-document.getElementById('avgUsefulness').textContent=avgUsefulness.toFixed(2);
-document.getElementById('avgEase').textContent=avgEase.toFixed(2);
-document.getElementById('avgReliability').textContent=avgReliability.toFixed(2);
-document.getElementById('satisfactionRate').innerHTML=satisfactionPercent.toFixed(2)+'<span class="suffix">%</span>';
-document.getElementById('improveRate').innerHTML=improvePercent.toFixed(2)+'<span class="suffix">%</span>';
-document.getElementById('barUsefulnessHeader').style.width=(avgUsefulness/5*100)+'%';
-document.getElementById('barEaseHeader').style.width=(avgEase/5*100)+'%';
-document.getElementById('barReliabilityHeader').style.width=(avgReliability/5*100)+'%';
-document.getElementById('barSatisfactionHeader').style.width=satisfactionPercent+'%';
-document.getElementById('barImproveHeader').style.width=improvePercent+'%';
-document.getElementById('scoreUsefulness').innerHTML=avgUsefulness.toFixed(2)+' <span class="max">/5</span>';
-document.getElementById('scoreEase').innerHTML=avgEase.toFixed(2)+' <span class="max">/5</span>';
-document.getElementById('scoreReliability').innerHTML=avgReliability.toFixed(2)+' <span class="max">/5</span>';
-document.getElementById('scoreConvenience').innerHTML=avgConvenience.toFixed(2)+' <span class="max">/5</span>';
-document.getElementById('scoreCommunication').innerHTML=avgCommunication.toFixed(2)+' <span class="max">/1</span>';
-document.getElementById('scoreTracking').innerHTML=avgTracking.toFixed(2)+' <span class="max">/1</span>';
-document.getElementById('barUsefulness').style.width=(avgUsefulness/5*100)+'%';
-document.getElementById('barEase').style.width=(avgEase/5*100)+'%';
-document.getElementById('barReliability').style.width=(avgReliability/5*100)+'%';
-document.getElementById('barConvenience').style.width=(avgConvenience/5*100)+'%';
-document.getElementById('barCommunication').style.width=(avgCommunication*100)+'%';
-document.getElementById('barTracking').style.width=(avgTracking*100)+'%';
-}
-
-var sugC=document.getElementById('suggestionsContainer');
-suggestions.forEach(function(s){var d=document.createElement('div');d.className='suggestion-item';d.innerHTML='<i class="fas fa-quote-left quote-icon"></i>'+s;sugC.appendChild(d)});
-
-function updateInsightCards(data){var n=data.length||1;var sat=data.filter(function(d){return d.satisfaction==='Satisfied'||d.satisfaction==='Very Satisfied'}).length/n*100;var adopt=data.filter(function(d){return d.usesLMS==='Yes'}).length/n*100;var iss=sortObj(countProblems(data,'problems'));var ti=iss[0];
-var cs=[['Usefulness',avgBy(data,'usefulness',usefulnessMap),5],['Ease',avgBy(data,'ease',easeMap),5],['Reliability',avgBy(data,'reliability',reliabilityMap),5],['Assignment',avgBy(data,'assignmentConvenience',convenienceMap),5],['Teacher Comm.',avgBy(data,'teacherComm',commMap),1],['Tracking',avgBy(data,'tracking',trackingMap),1]];
-var str=cs.slice().sort(function(a,b){return (b[1]/b[2])-(a[1]/a[2])})[0];
-document.getElementById('insightSatisfaction').textContent=data.length?sat.toFixed(2)+'%':'—';
-document.getElementById('insightSatisfactionDetail').textContent=data.length?(data.filter(function(d){return d.satisfaction==='Very Satisfied'}).length+data.filter(function(d){return d.satisfaction==='Satisfied'}).length)+' of '+data.length+' satisfied.':'No data.';
-document.getElementById('insightStrongest').textContent=data.length?str[0]:'—';
-document.getElementById('insightStrongestDetail').textContent=data.length?str[1].toFixed(2)+' / '+str[2]:'—';
-document.getElementById('insightRisk').textContent=ti?ti[0]:'No major issue';
-document.getElementById('insightRiskDetail').textContent=ti?ti[1]+' mentions':'No recurring issue.';
-document.getElementById('insightAdoption').textContent=data.length?adopt.toFixed(2)+'%':'—';
-document.getElementById('insightAdoptionDetail').textContent=data.length?data.filter(function(d){return d.usesLMS==='Yes'}).length+' of '+data.length+' use LMS.':'—';
-}
-
-function renderTable(data){var body=document.getElementById('responseTableBody');document.getElementById('tableCountBadge').textContent=data.length+' rows';if(!data.length){body.innerHTML='<tr><td colspan="11" class="empty-state">No data.</td></tr>';return}
-body.innerHTML=data.map(function(d,i){var sc=(d.satisfaction==='Very Satisfied'||d.satisfaction==='Satisfied')?'good':(d.satisfaction==='Neutral'?'warn':'bad');var uc=d.usesLMS==='Yes'?'good':'warn';return '<tr><td>'+(i+1)+'</td><td>'+esc(d.faculty)+'</td><td>'+esc(d.year)+'</td><td>'+esc(d.gender)+'</td><td><span class="status-pill '+uc+'">'+esc(d.usesLMS)+'</span></td><td>'+esc(d.platform||'—')+'</td><td>'+esc(d.frequency)+'</td><td>'+esc(d.usefulness)+'</td><td>'+esc(d.ease)+'</td><td>'+esc(d.reliability)+'</td><td><span class="status-pill '+sc+'">'+esc(d.satisfaction)+'</span></td></tr>'}).join('')}
-
-document.getElementById('printReport').addEventListener('click',function(){window.print()});
-document.getElementById('exportCsv').addEventListener('click',function(){
-var h=['Gender','Faculty','Academic Year','Uses LMS','Platform','Frequency','Ease','Usefulness','Reliability','Assignment Convenience','Teacher Communication','Assignment Tracking','Satisfaction'];
-var k=['gender','faculty','year','usesLMS','platform','frequency','ease','usefulness','reliability','assignmentConvenience','teacherComm','tracking','satisfaction'];
-var csv=[h.join(',')];rawData.forEach(function(r){csv.push(k.map(function(x){return '"'+String(r[x]||'').replace(/"/g,'""')+'"'}).join(','))});
-var b=new Blob([csv.join('\n')],{type:'text/csv;charset=utf-8;'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='lms_data.csv';a.click();URL.revokeObjectURL(a.href);showToast('📊 CSV downloaded!')});
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();if(e.key==='d'&&e.ctrlKey){e.preventDefault();document.getElementById('themeToggle').click()}});
-
-updateStats();
-initCharts();
-renderTable(rawData);
-updateInsightCards(rawData);
-console.log('📱 LMS Dashboard - '+total+' responses loaded');
+load();
+setInterval(load,60000);
 </script>
 </body>
 </html>
